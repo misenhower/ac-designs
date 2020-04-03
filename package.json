@@ -1,0 +1,32 @@
+{
+  "name": "ac-designs",
+  "description": "Animal Crossing QR code generator/parser",
+  "version": "0.0.1",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "lint": "eslint */**/*.{js,ts,tsx} --quiet --fix",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/misenhower/ac-designs.git"
+  },
+  "license": "MIT",
+  "files": [
+    "dist"
+  ],
+  "dependencies": {
+    "qrcode": "ssh://git@github.com:misenhower/node-qrcode.git#structured-append"
+  },
+  "devDependencies": {
+    "@types/jest": "^25.1.5",
+    "@typescript-eslint/eslint-plugin": "^2.26.0",
+    "@typescript-eslint/parser": "^2.26.0",
+    "eslint": "^6.8.0",
+    "jest": "^25.2.6",
+    "ts-jest": "^25.3.0",
+    "typescript": "^3.8.3"
+  }
+}
