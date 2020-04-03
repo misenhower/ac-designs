@@ -42,11 +42,16 @@ export class QRData {
   // Properties
 
   /**
-   * The design's title (up to 42 bytes).
+   * The design's title (UTF-16 encoded, up to 42 bytes).
    * Only supported for normal design QR codes and the first QR code for pro designs.
    */
   get title(): string | undefined {
     return this.hasMetadata() ? this.getString(0, 42) : undefined;
+  }
+
+  set title(value: string | undefined) {
+    this.throwIfInvalidMetadataSetter(value);
+    this.setString(0, 42, value as string);
   }
 
   /**
@@ -57,12 +62,22 @@ export class QRData {
     return this.hasMetadata() ? this.getNumber(42, 2) : undefined;
   }
 
+  set playerId(value: number | undefined) {
+    this.throwIfInvalidMetadataSetter(value);
+    this.setNumber(42, 2, value as number);
+  }
+
   /**
-   * The creator's name (up to 18 bytes).
+   * The creator's name (UTF-16 encoded, up to 18 bytes).
    * Only supported for normal design QR codes and the first QR code for pro designs.
    */
   get creator(): string | undefined {
     return this.hasMetadata() ? this.getString(44, 18) : undefined;
+  }
+
+  set creator(value: string | undefined) {
+    this.throwIfInvalidMetadataSetter(value);
+    this.setString(44, 18, value as string);
   }
 
   /**
@@ -73,6 +88,11 @@ export class QRData {
     return this.hasMetadata() ? this.getNumber(62, 1) : undefined;
   }
 
+  set sex(value: number | undefined) {
+    this.throwIfInvalidMetadataSetter(value);
+    this.setNumber(62, 1, value as number);
+  }
+
   /**
    * The village ID (2 bytes).
    * Only supported for normal design QR codes and the first QR code for pro designs.
@@ -81,12 +101,22 @@ export class QRData {
     return this.hasMetadata() ? this.getNumber(64, 2) : undefined;
   }
 
+  set villageId(value: number | undefined) {
+    this.throwIfInvalidMetadataSetter(value);
+    this.setNumber(64, 2, value as number);
+  }
+
   /**
-   * The village name (up to 18 bytes).
+   * The village name (UTF-16 encoded, up to 18 bytes).
    * Only supported for normal design QR codes and the first QR code for pro designs.
    */
   get village(): string | undefined {
     return this.hasMetadata() ? this.getString(66, 18) : undefined;
+  }
+
+  set village(value: string | undefined) {
+    this.throwIfInvalidMetadataSetter(value);
+    this.setString(66, 18, value as string);
   }
 
   /**
@@ -97,12 +127,22 @@ export class QRData {
     return this.hasMetadata() ? this.getNumber(84, 1) : undefined;
   }
 
+  set language(value: number | undefined) {
+    this.throwIfInvalidMetadataSetter(value);
+    this.setNumber(84, 1, value as number);
+  }
+
   /**
    * The country ID (1 byte).
    * Only supported for normal design QR codes and the first QR code for pro designs.
    */
   get country(): number | undefined {
     return this.hasMetadata() ? this.getNumber(86, 1) : undefined;
+  }
+
+  set country(value: number | undefined) {
+    this.throwIfInvalidMetadataSetter(value);
+    this.setNumber(86, 1, value as number);
   }
 
   /**
@@ -113,12 +153,27 @@ export class QRData {
     return this.hasMetadata() ? this.getNumber(87, 1) : undefined;
   }
 
+  set region(value: number | undefined) {
+    this.throwIfInvalidMetadataSetter(value);
+    this.setNumber(87, 1, value as number);
+  }
+
   /**
    * The palette colors (15 bytes).
    * Only supported for normal design QR codes and the first QR code for pro designs.
    */
   get paletteColors(): Uint8Array | undefined {
     return this.hasMetadata() ? this.getByteSubset(88, 15) : undefined;
+  }
+
+  set paletteColors(value: Uint8Array | undefined) {
+    this.throwIfInvalidMetadataSetter(value);
+
+    if ((value as Uint8Array).length !== 15) {
+      throw new Error('Invalid data length');
+    }
+
+    this.setByteSubset(88, value as Uint8Array);
   }
 
   /**
@@ -129,12 +184,22 @@ export class QRData {
     return this.hasMetadata() ? this.getNumber(103, 1) : undefined;
   }
 
+  set color(value: number | undefined) {
+    this.throwIfInvalidMetadataSetter(value);
+    this.setNumber(103, 1, value as number);
+  }
+
   /**
    * The looks (this field's purpose is currently unknown) (1 byte).
    * Only supported for normal design QR codes and the first QR code for pro designs.
    */
   get looks(): number | undefined {
     return this.hasMetadata() ? this.getNumber(104, 1) : undefined;
+  }
+
+  set looks(value: number | undefined) {
+    this.throwIfInvalidMetadataSetter(value);
+    this.setNumber(104, 1, value as number);
   }
 
   /**
@@ -145,24 +210,43 @@ export class QRData {
     return this.hasMetadata() ? this.getNumber(105, 1) : undefined;
   }
 
+  set usage(value: number | undefined) {
+    this.throwIfInvalidMetadataSetter(value);
+    this.setNumber(105, 1, value as number);
+  }
+
   /**
    * Each pixel's color data.
    * For pro designs, this only contains a segment of the full design's pixel data.
    * Total size varies depending on QR code type and index.
    */
   get colorData(): Uint8Array {
+    return this.getByteSubset(...this.colorDataByteRange());
+  }
+
+  set colorData(value: Uint8Array) {
+    const range = this.colorDataByteRange();
+
+    if ((value as Uint8Array).length !== range[1]) {
+      throw new Error('Invalid data length');
+    }
+
+    this.setByteSubset(range[0], value as Uint8Array);
+  }
+
+  private colorDataByteRange(): [number, number] {
     if (this.type === DesignType.Normal) {
-      return this.getByteSubset(108, 512);
+      return [108, 512];
     }
 
     switch (this.index) {
       case 0:
-        return this.getByteSubset(108, 432);
+        return [108, 432];
       case 1:
       case 2:
-        return this.getByteSubset(0, 540);
+        return [0, 540];
       case 3:
-        return this.getByteSubset(0, 536);
+        return [0, 536];
     }
 
     throw new Error('Invalid parameters');
@@ -192,9 +276,13 @@ export class QRData {
     );
   }
 
-  private throwIfNoMetadata(): void {
+  private throwIfInvalidMetadataSetter(value: unknown): void {
     if (!this.hasMetadata()) {
       throw new Error('This QR data type has no metadata');
+    }
+
+    if (value === undefined || value === null) {
+      throw new Error('Value is required');
     }
   }
 
@@ -221,5 +309,29 @@ export class QRData {
   private getNumber(offset: number, length: number): number {
     return this.getByteSubset(offset, length)
       .reduce((result, b) => (result << 8) + b, 0);
+  }
+
+  private setByteSubset(offset: number, data: Uint8Array): void {
+    this.data.set(data, offset);
+  }
+
+  private setString(offset: number, length: number, value: string): void{
+    // Convert the string to UTF-16 LE
+    // NOTE: This may not truncate multi-code unit characters properly. Code points
+    // that require more than 2 bytes may be malformed.
+    const bytes = new Uint8Array(length);
+    for (let i = 0; i < value.length && i * 2 < bytes.length; i++) {
+      const charCode = value.charCodeAt(i);
+      bytes[i * 2] = charCode;
+      bytes[i * 2 + 1] = charCode >> 8;
+    }
+
+    this.setByteSubset(offset, bytes);
+  }
+
+  private setNumber(offset: number, length: number, value: number): void{
+    for (let i = 0; i < length; i++) {
+      this.data[offset + i] = value >> (8 * (length - i - 1));
+    }
   }
 }
