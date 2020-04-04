@@ -6,6 +6,7 @@ const BYTE_LENGTH_PRO = 540;
 export class QRData {
   public readonly type: DesignType;
   public readonly index?: number;
+  public parity?: number;
   private readonly data: Uint8Array;
 
   constructor(type: DesignType, index?: number) {
@@ -265,6 +266,23 @@ export class QRData {
 
   getBytes(): Uint8Array {
     return this.data;
+  }
+
+  // Parity calculation
+
+  static calculateParity(qrDatas: QRData[]): void {
+    let parity = 0;
+
+    for (let i = 0; i < 4; i++) {
+      const qrData = qrDatas.find(qr => qr.type === DesignType.Pro && qr.index === i);
+      if (!qrData) {
+        throw new Error(`Couldn't find QRData for index ${i}`);
+      }
+
+      qrData.getBytes().forEach(b => parity ^= b);
+    }
+
+    qrDatas.forEach(d => d.parity = parity);
   }
 
   // Other helpers

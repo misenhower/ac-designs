@@ -1,5 +1,5 @@
 import { QRData } from '../src/QRData';
-import { sampleDesigns } from './fixtures/sampleDesignQrCodes';
+import { sampleDesigns, sampleProDesigns } from './fixtures/sampleDesignQrCodes';
 import { DesignType } from '../src/DesignType';
 
 test('normal designs use the correct number of bytes', () => {
@@ -246,4 +246,20 @@ test('it doesn\'t allow writing to invalid properties on subsequent pro QR codes
   expect(() => qrData.color = undefined).toThrow();
   expect(() => qrData.looks = undefined).toThrow();
   expect(() => qrData.usage = undefined).toThrow();
+});
+
+test('it can calculate parity for pro design sequences', () => {
+  const qrDatas = [
+    QRData.fromBytes(sampleProDesigns[0].bytes, 0),
+    QRData.fromBytes(sampleProDesigns[1].bytes, 1),
+    QRData.fromBytes(sampleProDesigns[2].bytes, 2),
+    QRData.fromBytes(sampleProDesigns[3].bytes, 3),
+  ];
+
+  QRData.calculateParity(qrDatas);
+
+  expect(qrDatas[0].parity).toBe(sampleProDesigns[0].parity);
+  expect(qrDatas[1].parity).toBe(sampleProDesigns[1].parity);
+  expect(qrDatas[2].parity).toBe(sampleProDesigns[2].parity);
+  expect(qrDatas[3].parity).toBe(sampleProDesigns[3].parity);
 });
