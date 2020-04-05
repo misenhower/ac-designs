@@ -1,3 +1,5 @@
+import { readFileSync, createWriteStream, writeFileSync } from 'fs';
+import { withFile } from 'tmp-promise';
 import { QRData } from '../src/QRData';
 import { sampleDesigns, sampleProDesigns } from './fixtures/sampleDesignQrCodes';
 import { DesignType } from '../src/DesignType';
@@ -263,3 +265,48 @@ test('it can calculate parity for pro design sequences', () => {
   expect(qrDatas[2].parity).toBe(sampleProDesigns[2].parity);
   expect(qrDatas[3].parity).toBe(sampleProDesigns[3].parity);
 });
+
+for (const sample of sampleDesigns) {
+  test(`it can generate a QR code file: ${sample.description}`, async () => {
+    const qrData = QRData.fromBytes(sample.bytes, sample.index);
+    qrData.parity = sample.parity;
+
+    const expected = readFileSync(`tests/fixtures/${sample.outputPngFile}`);
+
+    await withFile(async ({ path }) => {
+      await qrData.toFile(path);
+      const actual = readFileSync(path);
+      expect(actual).toStrictEqual(expected);
+    });
+  });
+}
+
+for (const sample of sampleDesigns) {
+  test(`it can generate a QR code stream: ${sample.description}`, async () => {
+    const qrData = QRData.fromBytes(sample.bytes, sample.index);
+    qrData.parity = sample.parity;
+
+    const expected = readFileSync(`tests/fixtures/${sample.outputPngFile}`);
+
+    await withFile(async ({ path }) => {
+      const stream = createWriteStream(path);
+      await qrData.toFileStream(stream);
+
+      const actual = readFileSync(path);
+      expect(actual).toStrictEqual(expected);
+    });
+  });
+}
+
+for (const sample of sampleDesigns) {
+  test(`it can generate a QR code data URL: ${sample.description}`, async () => {
+    const qrData = QRData.fromBytes(sample.bytes, sample.index);
+    qrData.parity = sample.parity;
+
+    const expected = readFileSync(`tests/fixtures/${sample.outputDataUrlFile}`).toString();
+
+    const result = await qrData.toDataUrl();
+
+    expect(result).toBe(expected);
+  });
+}
