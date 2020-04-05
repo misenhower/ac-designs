@@ -9,7 +9,7 @@ This isn't quite ready for use yet, so check back soon!
 - [X] `QRData` Class
   - [X] Read QR properties from byte data
   - [X] Write QR properties to byte data
-  - [ ] Generate QR code images
+  - [X] Generate QR code images
 
 - [ ] `Design` Class
   - [ ] Read design data from one or more `QRData` instances
