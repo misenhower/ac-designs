@@ -1,4 +1,4 @@
-import { readFileSync, createWriteStream, writeFileSync } from 'fs';
+import { readFileSync, createWriteStream } from 'fs';
 import { withFile } from 'tmp-promise';
 import { QRData } from '../src/QRData';
 import { sampleDesigns, sampleProDesigns } from './fixtures/sampleDesignQrCodes';
