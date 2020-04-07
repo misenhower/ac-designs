@@ -2,6 +2,7 @@ import { DesignType } from './DesignType';
 import { DesignUsage } from './DesignUsage';
 import { QRData } from './QRData';
 import { setString, setNumber, setByteSubset, getString, getNumber, getByteSubset, calculateParity } from './support/ByteUtils';
+import { ColorPalette } from './ColorPalette';
 
 export class Design {
   constructor(usage = DesignUsage.CustomDesign) {
@@ -48,16 +49,8 @@ export class Design {
   /** The region ID (1 byte). */
   regionId = 11;
 
-  /** The palette colors (15 bytes). */
-  private _paletteColors = new Uint8Array(15);
-  get paletteColors(): Uint8Array { return this._paletteColors; }
-  set paletteColors(value: Uint8Array) {
-    if (value.length !== 15) {
-      throw new Error('Invalid data length');
-    }
-
-    this._paletteColors = value;
-  }
+  /** The color palette (15 bytes). */
+  colorPalette = new ColorPalette;
 
   /** The color (this field's purpose is currently unknown) (1 byte). */
   color = 0;
@@ -132,7 +125,7 @@ export class Design {
     setNumber(data, 84, 1, this.languageId);
     setNumber(data, 86, 1, this.countryId);
     setNumber(data, 87, 1, this.regionId);
-    setByteSubset(data, 88, this.paletteColors);
+    setByteSubset(data, 88, this.colorPalette.bytes);
     setNumber(data, 103, 1, this.color);
     setNumber(data, 104, 1, this.looks);
     setNumber(data, 105, 1, this.usageId);
@@ -176,7 +169,7 @@ export class Design {
     this.languageId = getNumber(data, 84, 1);
     this.countryId = getNumber(data, 86, 1);
     this.regionId = getNumber(data, 87, 1);
-    this.paletteColors = getByteSubset(data, 88, 15);
+    this.colorPalette.bytes = getByteSubset(data, 88, 15);
     this.color = getNumber(data, 103, 1);
     this.looks = getNumber(data, 104, 1);
     this.usageId = getNumber(data, 105, 1);

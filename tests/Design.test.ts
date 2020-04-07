@@ -75,13 +75,6 @@ test('must specify a valid design usage ID', () => {
   expect(() => design.usageId = -1).toThrow();
 });
 
-test('palette colors must be the right length', () => {
-  const design = new Design();
-
-  expect(() => design.paletteColors = new Uint8Array(15)).not.toThrow();
-  expect(() => design.paletteColors = new Uint8Array(1)).toThrow();
-});
-
 test('normal color data must be the right length', () => {
   const design = new Design(FakeNormalDesignUsage);
   expect(() => design.colorData = new Uint8Array(512)).not.toThrow();
@@ -109,7 +102,7 @@ test('pro color data must be the right length', () => {
     expect(design.languageId).toBe(sample.properties.languageId);
     expect(design.countryId).toBe(sample.properties.countryId);
     expect(design.regionId).toBe(sample.properties.regionId);
-    expect(design.paletteColors).toStrictEqual(sample.properties.paletteColors);
+    expect(design.colorPalette.bytes).toStrictEqual(sample.properties.paletteColors);
     expect(design.color).toBe(sample.properties.color);
     expect(design.looks).toBe(sample.properties.looks);
     expect(design.usageId).toBe(sample.properties.usageId);
@@ -160,7 +153,7 @@ test('it handles special characters', () => {
     design.languageId = sample.properties.languageId;
     design.countryId = sample.properties.countryId;
     design.regionId = sample.properties.regionId;
-    design.paletteColors = sample.properties.paletteColors;
+    design.colorPalette.bytes = sample.properties.paletteColors;
     design.color = sample.properties.color;
     design.looks = sample.properties.looks;
     design.usageId = sample.properties.usageId;

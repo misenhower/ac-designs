@@ -18,7 +18,7 @@ This isn't quite ready for use yet, so check back soon!
   - [ ] Use xBRZ to smooth upscaled images
   - [ ] Convert normal images to AC designs, scaling and converting colors where necessary
 
-- [ ] `ColorPalette` Class
-  - [ ] Convert between AC colors and standard RGB colors
+- [X] `ColorPalette`/`Color` Classes
+  - [X] Convert between AC colors and standard RGB colors
 
 - [ ] Write documentation and examples
