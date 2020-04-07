@@ -1,8 +1,8 @@
 # ac-designs
 
-This package makes it easy to generate (or parse) QR codes for Animal Crossing designs.
+This package makes it easy to generate and parse QR codes for Animal Crossing designs.
 
-This isn't quite ready for use yet, so check back soon!
+**This isn't quite ready for use yet, so check back soon!**
 
 ## Roadmap
 
