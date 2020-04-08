@@ -2,6 +2,8 @@
 
 This package makes it easy to generate and parse QR codes for Animal Crossing designs.
 
+Many thanks to [ACNLPatternTool](https://github.com/Thulinma/ACNLPatternTool), which served as inspiration and reference for much of the design processing and data formatting code in this library.
+
 **This isn't quite ready for use yet, so check back soon!**
 
 ## Roadmap
