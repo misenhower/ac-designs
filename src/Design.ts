@@ -3,6 +3,7 @@ import { DesignUsage } from './DesignUsage';
 import { QRData } from './QRData';
 import { setString, setNumber, setByteSubset, getString, getNumber, getByteSubset, calculateParity } from './support/ByteUtils';
 import { ColorPalette } from './ColorPalette';
+import { Image } from './Image';
 
 export class Design {
   constructor(usage = DesignUsage.CustomDesign) {
@@ -207,5 +208,52 @@ export class Design {
         setByteSubset(this.colorData, 1512, getByteSubset(data.bytes, 0, 536));
         break;
     }
+  }
+
+  // Image conversion
+
+  private getImages(): Image[] {
+    // Get the RGBA hex values for each color in the palette
+    const palette = this.colorPalette.map(c => c.rgbaHex);
+    palette.push(0x00000000); // The last palette index is reserved for transparency
+
+    // Create an array of pixel data for the converted color data values
+    const imageData = new Uint32Array(this.colorData.length * 2);
+    this.colorData.forEach((b, i) => {
+      imageData[i * 2] = palette[b & 0x0F] as number;
+      imageData[i * 2 + 1] = palette[(b >> 4) & 0x0F] as number;
+    });
+
+    // If this is a pro design, return four 32x32 images from the data
+    if (this.usage.type === DesignType.Pro) {
+      return [
+        new Image(32, 32, imageData.subarray(0, 0 + 1024)),
+        new Image(32, 32, imageData.subarray(1024, 1024 + 1024)),
+        new Image(32, 32, imageData.subarray(2048, 2048 + 1024)),
+        new Image(32, 32, imageData.subarray(3072, 3072 + 1024)),
+      ];
+    }
+
+    // For normal designs, just return a single 32x32 image
+    return [new Image(32, 32, imageData)];
+  }
+
+  getImage(): Image {
+    const images = this.getImages();
+
+    // Pro designs: combine the images in a 2x2 grid
+    if (this.usage.type === DesignType.Pro) {
+      const result = new Image(64, 64, new Uint32Array(64 * 64));
+
+      result.blit(images[0], 0, 0);
+      result.blit(images[1], 0, 32);
+      result.blit(images[2], 32, 0);
+      result.blit(images[3], 32, 32);
+
+      return result;
+    }
+
+    // Normal designs: Just return the first image
+    return images[0];
   }
 }

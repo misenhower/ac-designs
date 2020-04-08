@@ -26,6 +26,24 @@ export class Color {
     this.byte = byte;
   }
 
+  get rgbaHex(): number | undefined {
+    const hex = this.hex;
+    if (hex === undefined) {
+      return undefined;
+    }
+
+    // We have to convert from a value like "#ABC" to "AABBCC", so each
+    // hex character needs to be repeated once.
+    // Also, for bitwise operations, JS converts the number to signed 32-bit ints,
+    // so we have to use <<< 0 at the end to convert it back to an unsigned 32-bit int.
+    return (
+      (parseInt(hex[1] + hex[1], 16) << 24) + // Red
+      (parseInt(hex[2] + hex[2], 16) << 16) + // Green
+      (parseInt(hex[3] + hex[3], 16) << 8) + // Blue
+      0xFF // Alpha channel (fully opaque)
+    ) >>> 0;
+  }
+
   private byteToHex(value: number): string | undefined {
     return Color.colorCodes[value];
   }

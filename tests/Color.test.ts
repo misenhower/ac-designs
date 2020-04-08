@@ -41,3 +41,8 @@ test('it handles valid hex values', () => {
   expect((new Color('FF66AA')).byte).toBe(0x03);
   expect((new Color('ff66aa')).byte).toBe(0x03);
 });
+
+test('it converts to rgba hex', () => {
+  expect((new Color(0x03)).rgbaHex).toBe(0xFF66AAFF);
+  expect((new Color(-1)).rgbaHex).toBeUndefined();
+});

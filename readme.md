@@ -14,11 +14,21 @@ This package makes it easy to generate and parse QR codes for Animal Crossing de
   - [X] Write QR properties to byte data
   - [X] Read design data from one or more `QRData` instances
   - [X] Write new design data back out to `QRData` instances
-  - [ ] Convert AC design format to normal images
-  - [ ] Use xBRZ to smooth upscaled images
   - [ ] Convert normal images to AC designs, scaling and converting colors where necessary
 
 - [X] `ColorPalette`/`Color` Classes
   - [X] Convert between AC colors and standard RGB colors
+
+- [X] `Image` Class
+  - [X] Convert AC design format to normal images
+  - [X] Output PNG files/data URLs
+  - [ ] Output to canvas elements
+  - [ ] Use xBRZ to smooth upscaled images
+
+- [ ] Cleanup
+  - [ ] Improve naming consistency between `to*` and `get*` methods
+  - [ ] Improve consistency between QR image and rendered design image output methods
+  - [ ] Possibly rename `Color` to `ACColor` to indicate it's not just a generic color class
+  - [ ] Tests: Import classes from `'../src/index'`
 
 - [ ] Write documentation and examples
