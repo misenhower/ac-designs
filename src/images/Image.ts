@@ -1,4 +1,6 @@
 import Jimp from 'jimp/es';
+import { ImageFilter } from './ImageFilter';
+import { XbrzImageFilter } from './XbrzImageFilter';
 
 export class Image {
   width: number;
@@ -33,6 +35,18 @@ export class Image {
 
     return image;
   }
+
+  // Filters
+
+  applyFilter(filter: ImageFilter): Promise<Image> {
+    return filter.apply(this);
+  }
+
+  applyXbrzUpscaling(scale: 2 | 3 | 4 | 5 | 6 = 4): Promise<Image> {
+    return this.applyFilter(new XbrzImageFilter(scale));
+  }
+
+  // Output
 
   async toFile(path: string): Promise<void> {
     const image = await this.getJimpImage();

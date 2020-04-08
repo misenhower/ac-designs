@@ -25,7 +25,7 @@ Many thanks to [ACNLPatternTool](https://github.com/Thulinma/ACNLPatternTool), w
   - [X] Convert AC design format to normal images
   - [X] Output PNG files/data URLs
   - [ ] Output to canvas elements
-  - [ ] Use xBRZ to smooth upscaled images
+  - [X] Use xBRZ to smooth upscaled images
 
 - [ ] Cleanup
   - [ ] Improve naming consistency between `to*` and `get*` methods

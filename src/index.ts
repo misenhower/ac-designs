@@ -3,5 +3,7 @@ export { ColorPalette } from './ColorPalette';
 export { Design } from './Design';
 export { DesignType } from './DesignType';
 export { DesignUsage } from './DesignUsage';
-export { Image } from './Image';
+export { Image } from './images/Image';
+export { ImageFilter } from './images/ImageFilter';
 export { QRData } from './QRData';
+export { XbrzImageFilter } from './images/XbrzImageFilter';

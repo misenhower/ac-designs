@@ -29,3 +29,33 @@ import { proDesign } from './fixtures/proDesign';
     expect(result).toBe(sample.imageBase64);
   });
 });
+
+test('it can use xBRZ to upscale images', async () => {
+  const design = Design.fromBytes(normalDesign.bytes);
+  const image = design.getImage();
+
+  const expected = readFileSync('tests/fixtures/normal_image_xbrz_4x.png');
+
+  await withFile(async ({ path }) => {
+    const upscaledImage = await image.applyXbrzUpscaling();
+    await upscaledImage.toFile(path);
+    const actual = readFileSync(path);
+
+    expect(actual).toStrictEqual(expected);
+  });
+});
+
+test('it can use xBRZ to upscale images with a specified scale', async () => {
+  const design = Design.fromBytes(normalDesign.bytes);
+  const image = design.getImage();
+
+  const expected = readFileSync('tests/fixtures/normal_image_xbrz_6x.png');
+
+  await withFile(async ({ path }) => {
+    const upscaledImage = await image.applyXbrzUpscaling(6);
+    await upscaledImage.toFile(path);
+    const actual = readFileSync(path);
+
+    expect(actual).toStrictEqual(expected);
+  });
+});

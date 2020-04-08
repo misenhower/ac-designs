@@ -3,7 +3,7 @@ import { DesignUsage } from './DesignUsage';
 import { QRData } from './QRData';
 import { setString, setNumber, setByteSubset, getString, getNumber, getByteSubset, calculateParity } from './support/ByteUtils';
 import { ColorPalette } from './ColorPalette';
-import { Image } from './Image';
+import { Image } from './images/Image';
 
 export class Design {
   constructor(usage = DesignUsage.CustomDesign) {
