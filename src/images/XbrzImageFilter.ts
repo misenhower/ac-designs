@@ -1,7 +1,7 @@
 import { Image } from './Image';
 import { ImageFilter } from './ImageFilter';
-import { Filter as XbrzFilter } from '../support/PixelFilterJS/xbrz.js';
-import { Common as PixelFilterJSCommon } from '../support/PixelFilterJS/Common.js';
+import { Filter as XbrzFilter } from './PixelFilterJS/xbrz.js';
+import { Common as PixelFilterJSCommon } from './PixelFilterJS/Common.js';
 
 export class XbrzImageFilter implements ImageFilter {
   constructor(scale: 2 | 3 | 4 | 5 | 6 = 4) {
