@@ -1,7 +1,6 @@
 import { readFileSync, createWriteStream } from 'fs';
 import { withFile } from 'tmp-promise';
-import { QRData } from '../src/QRData';
-import { DesignType } from '../src/DesignType';
+import { QRData, DesignType } from '../src';
 import { normalDesign } from './fixtures/normalDesign';
 import { proDesign } from './fixtures/proDesign';
 

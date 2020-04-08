@@ -1,4 +1,4 @@
-import { ColorPalette } from '../src/ColorPalette';
+import { ColorPalette } from '../src';
 
 test('it contains the correct number of colors', () => {
   const palette = new ColorPalette;

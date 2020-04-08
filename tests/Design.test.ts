@@ -1,7 +1,4 @@
-import { Design } from '../src/Design';
-import { DesignType } from '../src/DesignType';
-import { DesignUsage } from '../src/DesignUsage';
-import { QRData } from '../src/QRData';
+import { Design, DesignType, DesignUsage, QRData } from '../src';
 import { normalDesign } from './fixtures/normalDesign';
 import { proDesign } from './fixtures/proDesign';
 

@@ -1,4 +1,4 @@
-import { DesignType } from '../../src/DesignType';
+import { DesignType } from '../../src';
 
 interface QRCodeData {
   bytes: Uint8Array;

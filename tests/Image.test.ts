@@ -1,6 +1,6 @@
 import { readFileSync } from 'fs';
 import { withFile } from 'tmp-promise';
-import { Design } from '../src/Design';
+import { Design } from '../src';
 import { normalDesign } from './fixtures/normalDesign';
 import { proDesign } from './fixtures/proDesign';
 

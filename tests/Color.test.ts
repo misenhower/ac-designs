@@ -1,4 +1,4 @@
-import { Color } from '../src/Color';
+import { Color } from '../src';
 
 test('it can convert to hex values', () => {
   expect((new Color(0x03)).hex).toBe('#F6A');
