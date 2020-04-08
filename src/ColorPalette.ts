@@ -24,7 +24,6 @@ export class ColorPalette extends Array<Color> {
 
   set bytes(value: Uint8Array) {
     if (value.length !== COLOR_PALETTE_LENGTH) {
-      console.log(value);
       throw new Error('Invalid color palette length');
     }
 

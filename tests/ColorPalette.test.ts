@@ -41,3 +41,8 @@ test('it can be initialized with bytes', () => {
   expect(palette[0].byte).toBe(0x0F);
   expect(palette[1].byte).toBe(0x54);
 });
+
+test('bytes must be the correct size', () => {
+  expect(() => new ColorPalette(new Uint8Array(1))).toThrow();
+  expect(() => (new ColorPalette).bytes = new Uint8Array(1)).toThrow();
+});
