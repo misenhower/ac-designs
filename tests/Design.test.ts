@@ -99,7 +99,7 @@ test('pro color data must be the right length', () => {
     expect(design.languageId).toBe(sample.properties.languageId);
     expect(design.countryId).toBe(sample.properties.countryId);
     expect(design.regionId).toBe(sample.properties.regionId);
-    expect(design.colorPalette.bytes).toStrictEqual(sample.properties.paletteColors);
+    expect(design.colorPalette.acnlBytes).toStrictEqual(sample.properties.paletteColors);
     expect(design.color).toBe(sample.properties.color);
     expect(design.looks).toBe(sample.properties.looks);
     expect(design.usageId).toBe(sample.properties.usageId);
@@ -150,7 +150,7 @@ test('it handles special characters', () => {
     design.languageId = sample.properties.languageId;
     design.countryId = sample.properties.countryId;
     design.regionId = sample.properties.regionId;
-    design.colorPalette.bytes = sample.properties.paletteColors;
+    design.colorPalette.acnlBytes = sample.properties.paletteColors;
     design.color = sample.properties.color;
     design.looks = sample.properties.looks;
     design.usageId = sample.properties.usageId;
@@ -184,19 +184,3 @@ test('it generates pro QR codes', () => {
     expect(qrDatas[i].parity).toBe(proDesign.parity);
   }
 });
-
-// test('it can calculate parity for pro design sequences', () => {
-//   const qrDatas = [
-//     QRData.fromBytes(sampleProDesigns[0].bytes, 0),
-//     QRData.fromBytes(sampleProDesigns[1].bytes, 1),
-//     QRData.fromBytes(sampleProDesigns[2].bytes, 2),
-//     QRData.fromBytes(sampleProDesigns[3].bytes, 3),
-//   ];
-
-//   QRData.calculateParity(qrDatas);
-
-//   expect(qrDatas[0].parity).toBe(sampleProDesigns[0].parity);
-//   expect(qrDatas[1].parity).toBe(sampleProDesigns[1].parity);
-//   expect(qrDatas[2].parity).toBe(sampleProDesigns[2].parity);
-//   expect(qrDatas[3].parity).toBe(sampleProDesigns[3].parity);
-// });

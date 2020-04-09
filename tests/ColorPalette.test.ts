@@ -8,27 +8,27 @@ test('it contains the correct number of colors', () => {
 
 test('it can export to bytes', () => {
   const palette = new ColorPalette;
-  palette[0].byte = 0x0F;
-  palette[1].byte = 0x54;
+  palette[0].acnlByte = 0x0F;
+  palette[1].acnlByte = 0x54;
 
   const expected = new Uint8Array(15);
   expected[0] = 0x0F;
   expected[1] = 0x54;
 
-  expect(palette.bytes).toStrictEqual(expected);
+  expect(palette.acnlBytes).toStrictEqual(expected);
 });
 
-test('it can replace bytes', () => {
+test('it can replace ACNL bytes', () => {
   const palette = new ColorPalette;
 
   const bytes = new Uint8Array(15);
   bytes[0] = 0x0F;
   bytes[1] = 0x54;
 
-  palette.bytes = bytes;
+  palette.acnlBytes = bytes;
 
-  expect(palette[0].byte).toBe(0x0F);
-  expect(palette[1].byte).toBe(0x54);
+  expect(palette[0].acnlByte).toBe(0x0F);
+  expect(palette[1].acnlByte).toBe(0x54);
 });
 
 test('it can be initialized with bytes', () => {
@@ -38,11 +38,11 @@ test('it can be initialized with bytes', () => {
 
   const palette = new ColorPalette(bytes);
 
-  expect(palette[0].byte).toBe(0x0F);
-  expect(palette[1].byte).toBe(0x54);
+  expect(palette[0].acnlByte).toBe(0x0F);
+  expect(palette[1].acnlByte).toBe(0x54);
 });
 
 test('bytes must be the correct size', () => {
   expect(() => new ColorPalette(new Uint8Array(1))).toThrow();
-  expect(() => (new ColorPalette).bytes = new Uint8Array(1)).toThrow();
+  expect(() => (new ColorPalette).acnlBytes = new Uint8Array(1)).toThrow();
 });

@@ -30,7 +30,7 @@ Many thanks to [ACNLPatternTool](https://github.com/Thulinma/ACNLPatternTool), w
 - [ ] Cleanup
   - [ ] Improve naming consistency between `to*` and `get*` methods
   - [ ] Improve consistency between QR image and rendered design image output methods
-  - ~~[ ] Possibly rename `Color` to `ACColor` to indicate it's not just a generic color class~~
+  - [X] Update `Color` to make it more clear that color values are ACNH byte codes
   - [X] Tests: Import classes from `'../src/index'`
 
 - [ ] Write documentation and examples

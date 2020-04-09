@@ -126,7 +126,7 @@ export class Design {
     setNumber(data, 84, 1, this.languageId);
     setNumber(data, 86, 1, this.countryId);
     setNumber(data, 87, 1, this.regionId);
-    setByteSubset(data, 88, this.colorPalette.bytes);
+    setByteSubset(data, 88, this.colorPalette.acnlBytes);
     setNumber(data, 103, 1, this.color);
     setNumber(data, 104, 1, this.looks);
     setNumber(data, 105, 1, this.usageId);
@@ -170,7 +170,7 @@ export class Design {
     this.languageId = getNumber(data, 84, 1);
     this.countryId = getNumber(data, 86, 1);
     this.regionId = getNumber(data, 87, 1);
-    this.colorPalette.bytes = getByteSubset(data, 88, 15);
+    this.colorPalette.acnlBytes = getByteSubset(data, 88, 15);
     this.color = getNumber(data, 103, 1);
     this.looks = getNumber(data, 104, 1);
     this.usageId = getNumber(data, 105, 1);
@@ -214,7 +214,7 @@ export class Design {
 
   private getImages(): Image[] {
     // Get the RGBA hex values for each color in the palette
-    const palette = this.colorPalette.map(c => c.rgbaHex);
+    const palette = this.colorPalette.map(c => c.hexNumber);
     palette.push(0x00000000); // The last palette index is reserved for transparency
 
     // Create an array of pixel data for the converted color data values
