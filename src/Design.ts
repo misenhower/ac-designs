@@ -24,13 +24,13 @@ export class Design {
   }
 
   /** The design's title (UTF-16 encoded, up to 42 bytes). */
-  title: string | undefined;
+  title: string | undefined = undefined;
 
   /** The player ID (2 bytes). */
   playerId = 0;
 
   /** The creator's name (UTF-16 encoded, up to 18 bytes). */
-  creator: string | undefined;
+  creator: string | undefined = undefined;
 
   /** The creator's sex (1 byte). */
   sex = 0;
@@ -39,7 +39,7 @@ export class Design {
   villageId = 0;
 
   /** The village name (UTF-16 encoded, up to 18 bytes). */
-  village: string | undefined;
+  village: string | undefined = undefined;
 
   /** The language ID (1 byte). */
   languageId = 1;
