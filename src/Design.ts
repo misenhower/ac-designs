@@ -214,7 +214,7 @@ export class Design {
 
   private getImages(): Image[] {
     // Get the RGBA hex values for each color in the palette
-    const palette = this.colorPalette.map(c => c.hexNumber);
+    const palette = this.colorPalette.colors.map(c => c.hexNumber);
     palette.push(0x00000000); // The last palette index is reserved for transparency
 
     // Create an array of pixel data for the converted color data values

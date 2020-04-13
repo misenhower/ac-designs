@@ -3,13 +3,13 @@ import { ColorPalette } from '../src';
 test('it contains the correct number of colors', () => {
   const palette = new ColorPalette;
 
-  expect(palette.length).toBe(15);
+  expect(palette.colors.length).toBe(15);
 });
 
 test('it can export to bytes', () => {
   const palette = new ColorPalette;
-  palette[0].acnlByte = 0x0F;
-  palette[1].acnlByte = 0x54;
+  palette.colors[0].acnlByte = 0x0F;
+  palette.colors[1].acnlByte = 0x54;
 
   const expected = new Uint8Array(15);
   expected[0] = 0x0F;
@@ -27,8 +27,8 @@ test('it can replace ACNL bytes', () => {
 
   palette.acnlBytes = bytes;
 
-  expect(palette[0].acnlByte).toBe(0x0F);
-  expect(palette[1].acnlByte).toBe(0x54);
+  expect(palette.colors[0].acnlByte).toBe(0x0F);
+  expect(palette.colors[1].acnlByte).toBe(0x54);
 });
 
 test('it can be initialized with bytes', () => {
@@ -38,8 +38,8 @@ test('it can be initialized with bytes', () => {
 
   const palette = new ColorPalette(bytes);
 
-  expect(palette[0].acnlByte).toBe(0x0F);
-  expect(palette[1].acnlByte).toBe(0x54);
+  expect(palette.colors[0].acnlByte).toBe(0x0F);
+  expect(palette.colors[1].acnlByte).toBe(0x54);
 });
 
 test('bytes must be the correct size', () => {

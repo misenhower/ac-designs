@@ -2,24 +2,21 @@ import { Color } from './Color';
 
 const COLOR_PALETTE_LENGTH = 15;
 
-export class ColorPalette extends Array<Color> {
-  constructor(acnlBytes?: Uint8Array) {
-    super(COLOR_PALETTE_LENGTH);
+export class ColorPalette {
+  public readonly colors = new Array<Color>(COLOR_PALETTE_LENGTH);
 
+  constructor(acnlBytes?: Uint8Array) {
     for (let i = 0; i < COLOR_PALETTE_LENGTH; i++) {
-      this[i] = new Color;
+      this.colors[i] = new Color;
     }
 
-    // Note: Calling .map creates a new instance of this ColorPalette class
-    // with the number of elements passed as the first argument.
-    // We have to make sure the argument is actually a Uint8Array instance.
-    if (acnlBytes instanceof Uint8Array) {
+    if (acnlBytes) {
       this.acnlBytes = acnlBytes;
     }
   }
 
   get acnlBytes(): Uint8Array {
-    return new Uint8Array(this.map(c => c.acnlByte));
+    return new Uint8Array(this.colors.map(c => c.acnlByte));
   }
 
   set acnlBytes(value: Uint8Array) {
@@ -28,7 +25,7 @@ export class ColorPalette extends Array<Color> {
     }
 
     for (let i = 0; i < COLOR_PALETTE_LENGTH; i++) {
-      this[i].acnlByte = value[i];
+      this.colors[i].acnlByte = value[i];
     }
   }
 }
