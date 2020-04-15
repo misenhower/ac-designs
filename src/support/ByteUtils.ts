@@ -59,3 +59,17 @@ export function extractColorData(data: Uint8Array): Uint8Array {
   }
   return result;
 }
+
+export function convertPixelsFrom32To8(data: Uint32Array): Uint8ClampedArray {
+  const result = new Uint8ClampedArray(data.length * 4);
+
+  for (let i = 0; i < data.length; i++) {
+    const value = data[i];
+    result[i * 4 + 0] = (value >>> 24) & 0xFF;
+    result[i * 4 + 1] = (value >>> 16) & 0xFF;
+    result[i * 4 + 2] = (value >>> 8) & 0xFF;
+    result[i * 4 + 3] = (value >>> 0) & 0xFF;
+  }
+
+  return result;
+}

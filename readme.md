@@ -33,9 +33,9 @@ Many thanks to [ACNLPatternTool](https://github.com/Thulinma/ACNLPatternTool), w
 - [X] `Image` Class
   - [X] Convert AC design format to normal images
   - [X] Output PNG files/data URLs
-  - [ ] Output to canvas elements
+  - [X] Output to canvas elements
   - [X] Use xBRZ to smooth upscaled images
-  - [ ] Switch to node-canvas
+  - [X] Switch to node-canvas
 
 - [ ] Cleanup
   - [ ] Improve naming consistency between `to*` and `get*` methods
