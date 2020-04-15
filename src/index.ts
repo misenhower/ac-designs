@@ -1,9 +1,14 @@
 export { Color } from './Color';
 export { ColorPalette } from './ColorPalette';
+export { CompositeImageLayout } from './CompositeImageLayout';
+export { CompositeIndexedImage } from './images/CompositeIndexedImage';
 export { Design } from './Design';
 export { DesignType } from './DesignType';
 export { DesignUsage } from './DesignUsage';
 export { Image } from './images/Image';
 export { ImageFilter } from './images/ImageFilter';
+export { IndexedImage } from './images/IndexedImage';
+export { IndexedImageBase } from './images/IndexedImageBase';
+export { IndexedImageSegment } from './images/IndexedImageSegment';
 export { QRData } from './QRData';
 export { XbrzImageFilter } from './images/XbrzImageFilter';

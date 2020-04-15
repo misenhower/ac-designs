@@ -1,6 +1,6 @@
 import { readFileSync } from 'fs';
 import { withFile } from 'tmp-promise';
-import { Design } from '../src';
+import { Design, CompositeImageLayout } from '../src';
 import { normalDesign } from './fixtures/normalDesign';
 import { proDesign } from './fixtures/proDesign';
 
@@ -27,6 +27,19 @@ import { proDesign } from './fixtures/proDesign';
     const result = await image.toDataUrl();
 
     expect(result).toBe(sample.imageBase64);
+  });
+});
+
+test('it can use the acpatterns.com layout for pro designs', async () => {
+  const design = Design.fromBytes(proDesign.bytes);
+  const image = design.getImage(CompositeImageLayout.ACPatterns);
+
+  const expectedFile = readFileSync(`tests/fixtures/${proDesign.imagePngFileAcpatterns}`);
+
+  await withFile(async ({ path }) => {
+    await image.toFile(path);
+    const actual = readFileSync(path);
+    expect(actual).toStrictEqual(expectedFile);
   });
 });
 

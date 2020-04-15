@@ -1,6 +1,7 @@
 import { Design, DesignType, DesignUsage, QRData } from '../src';
 import { normalDesign } from './fixtures/normalDesign';
 import { proDesign } from './fixtures/proDesign';
+import { extractColorData } from '../src/support/ByteUtils';
 
 const FakeNormalDesignUsage = new DesignUsage(0xAB, DesignType.Normal, 'Fake Normal');
 const FakeProDesignUsage = new DesignUsage(0xCD, DesignType.Pro, 'Fake Pro');
@@ -37,13 +38,13 @@ test('village is required', () => {
 test('normal designs use the correct number of bytes', () => {
   const design = designFactory(FakeNormalDesignUsage);
   expect(design.getBytes().length).toBe(620);
-  expect(design.colorData.length).toBe(512);
+  expect(design.imageData.colorIndexes.length).toBe(1024);
 });
 
 test('pro designs use the correct number of bytes', () => {
   const design = designFactory(FakeProDesignUsage);
   expect(design.getBytes().length).toBe(2160);
-  expect(design.colorData.length).toBe(2048);
+  expect(design.imageData.colorIndexes.length).toBe(4096);
 });
 
 test('update design usage by value', () => {
@@ -74,14 +75,14 @@ test('must specify a valid design usage ID', () => {
 
 test('normal color data must be the right length', () => {
   const design = new Design(FakeNormalDesignUsage);
-  expect(() => design.colorData = new Uint8Array(512)).not.toThrow();
-  expect(() => design.colorData = new Uint8Array(1)).toThrow();
+  expect(() => design.imageData.colorIndexes = new Uint8Array(512)).not.toThrow();
+  expect(() => design.imageData.colorIndexes = new Uint8Array(1)).toThrow();
 });
 
 test('pro color data must be the right length', () => {
   const design = new Design(FakeProDesignUsage);
-  expect(() => design.colorData = new Uint8Array(2048)).not.toThrow();
-  expect(() => design.colorData = new Uint8Array(1)).toThrow();
+  expect(() => design.imageData.colorIndexes = new Uint8Array(2048)).not.toThrow();
+  expect(() => design.imageData.colorIndexes = new Uint8Array(1)).toThrow();
 });
 
 [normalDesign, proDesign].forEach((sample) => {
@@ -103,7 +104,7 @@ test('pro color data must be the right length', () => {
     expect(design.color).toBe(sample.properties.color);
     expect(design.looks).toBe(sample.properties.looks);
     expect(design.usageId).toBe(sample.properties.usageId);
-    expect(design.colorData).toStrictEqual(sample.properties.colorData);
+    expect(design.imageData.colorIndexes).toStrictEqual(extractColorData(sample.properties.colorData));
 
     expect(design.getBytes()).toStrictEqual(sample.bytes);
   });
@@ -154,7 +155,7 @@ test('it handles special characters', () => {
     design.color = sample.properties.color;
     design.looks = sample.properties.looks;
     design.usageId = sample.properties.usageId;
-    design.colorData = sample.properties.colorData;
+    design.imageData.colorIndexes = extractColorData(sample.properties.colorData);
 
     expect(design.getBytes()).toStrictEqual(sample.bytes);
   });

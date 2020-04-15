@@ -1,14 +1,18 @@
 import { DesignType } from './DesignType';
 import { DesignUsage } from './DesignUsage';
 import { QRData } from './QRData';
-import { setString, setNumber, setByteSubset, getString, getNumber, getByteSubset, calculateParity } from './support/ByteUtils';
+import { setString, setNumber, setByteSubset, getString, getNumber, getByteSubset, calculateParity, compressColorData, extractColorData } from './support/ByteUtils';
 import { ColorPalette } from './ColorPalette';
 import { Image } from './images/Image';
+import { IndexedImageBase } from './images/IndexedImageBase';
+import { IndexedImage } from './images/IndexedImage';
+import { CompositeIndexedImage } from './images/CompositeIndexedImage';
+import { CompositeImageLayout } from './CompositeImageLayout';
 
 export class Design {
   constructor(usage = DesignUsage.CustomDesign) {
     this._usage = usage;
-    this._colorData = this.createColorData();
+    this.refreshImageData();
   }
 
   static fromBytes(bytes: Uint8Array): Design {
@@ -64,7 +68,7 @@ export class Design {
   get usage(): DesignUsage { return this._usage; }
   set usage(value: DesignUsage) {
     this._usage = value;
-    this.refreshColorData();
+    this.refreshImageData();
   }
 
   /** The usage ID. */
@@ -79,28 +83,19 @@ export class Design {
   }
 
   /** Each pixel's color data. */
-  private _colorData: Uint8Array;
-  get colorData(): Uint8Array { return this._colorData; }
-  set colorData(value: Uint8Array) {
-    if (value.length !== this._colorData.length) {
-      throw new Error('Invalid data length');
+  private _imageData!: IndexedImage;
+  get imageData(): IndexedImageBase { return this._imageData; }
+
+  private refreshImageData(): void {
+    const oldImageData = this._imageData;
+
+    this._imageData = new IndexedImage(this.usage.colorDataPixelWidth, this.usage.colorDataPixelHeight, this);
+
+    if (oldImageData) {
+      const newIndexes = this._imageData.colorIndexes;
+      const oldIndexes = oldImageData.colorIndexes;
+      newIndexes.set(oldIndexes.subarray(0, newIndexes.length));
     }
-
-    this._colorData = value;
-  }
-
-  private refreshColorData(): void {
-    this._colorData = this.createColorData(this.colorData);
-  }
-
-  private createColorData(oldColorData?: Uint8Array): Uint8Array {
-    const colorData = new Uint8Array(this.usage.colorDataLength);
-
-    if (oldColorData) {
-      colorData.set(oldColorData.subarray(0, colorData.length));
-    }
-
-    return colorData;
   }
 
   // Export
@@ -130,7 +125,7 @@ export class Design {
     setNumber(data, 103, 1, this.color);
     setNumber(data, 104, 1, this.looks);
     setNumber(data, 105, 1, this.usageId);
-    setByteSubset(data, 108, this.colorData);
+    setByteSubset(data, 108, compressColorData(this.imageData.colorIndexes));
 
     return data;
   }
@@ -157,7 +152,7 @@ export class Design {
 
   loadBytes(bytes: Uint8Array): void {
     this.loadMetadataBytes(bytes);
-    this.colorData = getByteSubset(bytes, 108, this.usage.colorDataLength);
+    this.imageData.colorIndexes = extractColorData(getByteSubset(bytes, 108, this.usage.colorDataByteLength));
   }
 
   private loadMetadataBytes(data: Uint8Array): void {
@@ -196,64 +191,48 @@ export class Design {
     switch (data.index) {
       case 0:
         this.loadMetadataBytes(data.bytes);
-        setByteSubset(this.colorData, 0, getByteSubset(data.bytes, 108, 432));
+        setByteSubset(this.imageData.colorIndexes, 0, extractColorData(getByteSubset(data.bytes, 108, 432)));
         break;
       case 1:
-        setByteSubset(this.colorData, 432, getByteSubset(data.bytes, 0, 540));
+        setByteSubset(this.imageData.colorIndexes, 864, extractColorData(getByteSubset(data.bytes, 0, 540)));
         break;
       case 2:
-        setByteSubset(this.colorData, 972, getByteSubset(data.bytes, 0, 540));
+        setByteSubset(this.imageData.colorIndexes, 1944, extractColorData(getByteSubset(data.bytes, 0, 540)));
         break;
       case 3:
-        setByteSubset(this.colorData, 1512, getByteSubset(data.bytes, 0, 536));
+        setByteSubset(this.imageData.colorIndexes, 3024, extractColorData(getByteSubset(data.bytes, 0, 536)));
         break;
     }
   }
 
   // Image conversion
 
-  private getImages(): Image[] {
-    // Get the RGBA hex values for each color in the palette
-    const palette = this.colorPalette.colors.map(c => c.hexNumber);
-    palette.push(0x00000000); // The last palette index is reserved for transparency
-
-    // Create an array of pixel data for the converted color data values
-    const imageData = new Uint32Array(this.colorData.length * 2);
-    this.colorData.forEach((b, i) => {
-      imageData[i * 2] = palette[b & 0x0F] as number;
-      imageData[i * 2 + 1] = palette[(b >> 4) & 0x0F] as number;
-    });
-
-    // If this is a pro design, return four 32x32 images from the data
+  getIndexedImage(layout: CompositeImageLayout = CompositeImageLayout.Normal): IndexedImageBase {
+    // For pro designs, lay out the image segments in a 64x64 image
     if (this.usage.type === DesignType.Pro) {
-      return [
-        new Image(32, 32, imageData.subarray(0, 0 + 1024)),
-        new Image(32, 32, imageData.subarray(1024, 1024 + 1024)),
-        new Image(32, 32, imageData.subarray(2048, 2048 + 1024)),
-        new Image(32, 32, imageData.subarray(3072, 3072 + 1024)),
-      ];
+      // ACPatterns.com uses a slightly different image layout than the game itself
+      if (layout === CompositeImageLayout.ACPatterns) {
+        return (new CompositeIndexedImage(64, 64))
+          .addSource(this.imageData.getSegment(0, 0, 32, 32), 0, 0)
+          .addSource(this.imageData.getSegment(0, 32, 32, 32), 0, 32)
+          .addSource(this.imageData.getSegment(0, 64, 32, 32), 32, 0)
+          .addSource(this.imageData.getSegment(0, 96, 32, 32), 32, 32);
+      }
+
+      return (new CompositeIndexedImage(64, 64))
+        .addSource(this.imageData.getSegment(0, 0, 32, 32), 32, 0)
+        .addSource(this.imageData.getSegment(0, 32, 32, 32), 0, 0)
+        .addSource(this.imageData.getSegment(0, 64, 32, 16), 0, 48)
+        .addSource(this.imageData.getSegment(0, 80, 32, 16), 32, 48)
+        .addSource(this.imageData.getSegment(0, 96, 32, 16), 32, 32)
+        .addSource(this.imageData.getSegment(0, 112, 32, 16), 0, 32);
     }
 
-    // For normal designs, just return a single 32x32 image
-    return [new Image(32, 32, imageData)];
+    // For normal designs, we can just return the original image
+    return this.imageData;
   }
 
-  getImage(): Image {
-    const images = this.getImages();
-
-    // Pro designs: combine the images in a 2x2 grid
-    if (this.usage.type === DesignType.Pro) {
-      const result = new Image(64, 64, new Uint32Array(64 * 64));
-
-      result.blit(images[0], 0, 0);
-      result.blit(images[1], 0, 32);
-      result.blit(images[2], 32, 0);
-      result.blit(images[3], 32, 32);
-
-      return result;
-    }
-
-    // Normal designs: Just return the first image
-    return images[0];
+  getImage(layout: CompositeImageLayout = CompositeImageLayout.Normal): Image {
+    return this.getIndexedImage(layout).getImage();
   }
 }
