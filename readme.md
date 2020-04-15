@@ -50,4 +50,4 @@ Many thanks to [ACNLPatternTool](https://github.com/Thulinma/ACNLPatternTool), w
 - [ ] Documentation/examples
   - [ ] Write documentation
   - [ ] Add node example
-  - [ ] Add Vue example
+  - [X] Add Vue example

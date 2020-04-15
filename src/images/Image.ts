@@ -1,8 +1,11 @@
 import { promises as fs } from 'fs';
-import { Canvas, CanvasRenderingContext2D, ImageData, createCanvas, createImageData } from 'canvas';
+import { Canvas, CanvasRenderingContext2D as NodeCanvasRenderingContext2D, ImageData, createCanvas, createImageData } from 'canvas';
 import { ImageFilter } from './ImageFilter';
 import { XbrzImageFilter } from './XbrzImageFilter';
 import { convertPixelsFrom32To8 } from '../support/ByteUtils';
+
+// Compatibility layer for type checking in the browser
+const CanvasRenderingContext2D = NodeCanvasRenderingContext2D || window.CanvasRenderingContext2D;
 
 export class Image {
   width: number;
@@ -75,11 +78,11 @@ export class Image {
   }
 
   private resolveContext(value?: Canvas | HTMLCanvasElement | CanvasRenderingContext2D): CanvasRenderingContext2D {
-    if (value && value instanceof CanvasRenderingContext2D) {
+    if (value instanceof CanvasRenderingContext2D) {
       return value;
     }
 
-    return this.resolveCanvas(value).getContext('2d') as CanvasRenderingContext2D;
+    return this.resolveCanvas(value as Canvas).getContext('2d') as CanvasRenderingContext2D;
   }
 
   private getImageData(): ImageData {

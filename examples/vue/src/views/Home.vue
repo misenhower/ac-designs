@@ -1,0 +1,100 @@
+<template>
+  <div>
+    <div class="params">
+      <div>
+        <label>Title</label>
+        <input v-model="design.title" maxlength="24">
+      </div>
+      <div>
+        <label>Creator Name</label>
+        <input v-model="design.creator" maxlength="9">
+      </div>
+      <div>
+        <label>Village Name</label>
+        <input v-model="design.village" maxlength="9">
+      </div>
+      <div>
+        <label>Design Usage</label>
+        <select v-model="design.usageId">
+          <option v-for="usage in usages" :key="usage.id" :value="usage.id">
+            {{ usage.description }}
+          </option>
+        </select>
+      </div>
+    </div>
+
+    <div>
+      <ImagePreview :image="image" />
+      &nbsp;
+      <ImagePreview :image="image" xbrz />
+    </div>
+
+    <div v-if="qrCodes && qrCodes.length">
+      <QRCode v-for="(qrData,i) in qrCodes" :key="i" :qr-data="qrData" />
+    </div>
+  </div>
+</template>
+
+<script>
+import { Design, DesignUsage } from 'ac-designs';
+import debounce from 'lodash/debounce';
+
+export default {
+  components: {
+    QRCode: require('@/components/QRCode').default,
+    ImagePreview: require('@/components/ImagePreview').default,
+  },
+  data() {
+    return {
+      design: new Design,
+      qrCodes: null,
+    };
+  },
+  computed: {
+    image() {
+      return this.design.getImage();
+    },
+    usages() {
+      return DesignUsage.all;
+    }
+  },
+  watch: {
+    design: {
+      deep: true,
+      handler: debounce(function () { this.updateQRCodes(); }, 250),
+    }
+  },
+  mounted() {
+    this.design.title = 'Example Design';
+    this.design.creator = 'Someone';
+    this.design.village = 'Somewhere';
+  },
+  methods: {
+    updateQRCodes() {
+      try {
+        this.qrCodes = this.design.getQRData();
+      } catch (e) {
+        this.qrCodes = null;
+      }
+    },
+  }
+}
+</script>
+
+<style scoped>
+.params label {
+  display: inline-block;
+  width: 200px;
+  text-align: right;
+  margin-right: 5px;
+}
+
+.params input,
+.params select {
+  width: 250px;
+}
+
+.params>div {
+  margin-bottom: 5px;
+}
+</style>
