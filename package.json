@@ -1,7 +1,7 @@
 {
   "name": "ac-designs",
   "description": "Animal Crossing QR code generator/parser",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
