@@ -2,7 +2,7 @@ import { promises as fs } from 'fs';
 import { Canvas, CanvasRenderingContext2D as NodeCanvasRenderingContext2D, ImageData, createCanvas, createImageData } from 'canvas';
 import { ImageFilter } from './ImageFilter';
 import { XbrzImageFilter } from './XbrzImageFilter';
-import { convertPixelsFrom32To8 } from '../support/ByteUtils';
+import { convertPixelsFrom32To8, convertPixelsFrom8To32 } from '../support/ByteUtils';
 
 // Compatibility layer for type checking in the browser
 const CanvasRenderingContext2D = NodeCanvasRenderingContext2D || window.CanvasRenderingContext2D;
@@ -16,6 +16,11 @@ export class Image {
     this.width = width;
     this.height = height;
     this.data = data;
+  }
+
+  static fromCanvas(canvas: Canvas | HTMLCanvasElement): Image {
+    const imageData = (canvas as Canvas).getContext('2d').getImageData(0, 0, canvas.width, canvas.height);
+    return new Image(imageData.width, imageData.height, convertPixelsFrom8To32(imageData.data));
   }
 
   // Filters

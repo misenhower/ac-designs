@@ -1,4 +1,4 @@
-import { readFileSync, createWriteStream } from 'fs';
+import { promises as fs } from 'fs';
 import { withFile } from 'tmp-promise';
 import { QRData, DesignType } from '../src';
 import { normalDesign } from './fixtures/normalDesign';
@@ -60,51 +60,17 @@ test('replacement byte array must be the correct length', () => {
 
 [normalDesign, proDesign].forEach((design) => {
   design.qrCodeDatas.forEach((qrCodeData, i) => {
-    test(`it can generate a QR code file: ${design.description}, index: ${i}`, async () => {
+    test(`it can generate a QR code image: ${design.description}, index: ${i}`, async () => {
       const index = (design.type === DesignType.Pro) ? i : undefined;
       const qrData = QRData.fromBytes(qrCodeData.bytes, index, design.parity);
 
-      const expected = readFileSync(`tests/fixtures/${qrCodeData.outputPngFile}`);
+      const expected = await fs.readFile(`tests/fixtures/${qrCodeData.outputPngFile}`);
 
       await withFile(async ({ path }) => {
-        await qrData.toFile(path);
-        const actual = readFileSync(path);
+        await qrData.toImage().toFile(path);
+        const actual = await fs.readFile(path);
         expect(actual).toStrictEqual(expected);
       });
-    });
-  });
-});
-
-[normalDesign, proDesign].forEach((design) => {
-  design.qrCodeDatas.forEach((qrCodeData, i) => {
-    test(`it can generate a QR code stream: ${design.description}, index: ${i}`, async () => {
-      const index = (design.type === DesignType.Pro) ? i : undefined;
-      const qrData = QRData.fromBytes(qrCodeData.bytes, index, design.parity);
-
-      const expected = readFileSync(`tests/fixtures/${qrCodeData.outputPngFile}`);
-
-      await withFile(async ({ path }) => {
-        const stream = createWriteStream(path);
-        await qrData.toFileStream(stream);
-
-        const actual = readFileSync(path);
-        expect(actual).toStrictEqual(expected);
-      });
-    });
-  });
-});
-
-[normalDesign, proDesign].forEach((design) => {
-  design.qrCodeDatas.forEach((qrCodeData, i) => {
-    test(`it can generate a QR code data URL: ${design.description}, index: ${i}`, async () => {
-      const index = (design.type === DesignType.Pro) ? i : undefined;
-      const qrData = QRData.fromBytes(qrCodeData.bytes, index, design.parity);
-
-      const expected = readFileSync(`tests/fixtures/${qrCodeData.outputDataUrlFile}`).toString();
-
-      const result = await qrData.toDataUrl();
-
-      expect(result).toBe(expected);
     });
   });
 });

@@ -10,7 +10,7 @@ Many thanks to [ACNLPatternTool](https://github.com/Thulinma/ACNLPatternTool), w
 
 - [X] `QRData` Class
   - [X] Generate QR code images
-  - [ ] Switch image generation to node-canvas
+  - [X] Switch image generation to node-canvas
 
 - [X] `Design` Class
   - [X] Read QR properties from byte data
@@ -39,7 +39,7 @@ Many thanks to [ACNLPatternTool](https://github.com/Thulinma/ACNLPatternTool), w
 
 - [ ] Cleanup
   - [ ] Improve naming consistency between `to*` and `get*` methods
-  - [ ] Improve consistency between QR image and rendered design image output methods
+  - [X] Improve consistency between QR image and rendered design image output methods
   - [X] Update `Color` to make it more clear that color values are ACNH byte codes
   - [X] Tests: Import classes from `'../src/index'`
   - [ ] Improve error messages (e.g., show the expected/actual byte counts)

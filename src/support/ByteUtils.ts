@@ -73,3 +73,17 @@ export function convertPixelsFrom32To8(data: Uint32Array): Uint8ClampedArray {
 
   return result;
 }
+
+export function convertPixelsFrom8To32(data: Uint8ClampedArray): Uint32Array {
+  const result = new Uint32Array(data.length / 4);
+
+  for (let i = 0; i < result.length; i++) {
+    result[i] =
+      ((data[i * 4 + 0] << 24) & (0xFF << 24) >>> 0) +
+      ((data[i * 4 + 1] << 16) & (0xFF << 16) >>> 0) +
+      ((data[i * 4 + 2] << 8) & (0xFF << 8) >>> 0) +
+      ((data[i * 4 + 3] << 0) & (0xFF << 0) >>> 0);
+  }
+
+  return result;
+}

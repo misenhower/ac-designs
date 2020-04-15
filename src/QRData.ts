@@ -1,6 +1,8 @@
 import { DesignType } from './DesignType';
 import QRCode, { QRCodeSegment, QRCodeToDataURLOptions } from 'qrcode';
 import { Writable } from 'stream';
+import { Image } from './images/Image';
+import { createCanvas } from 'canvas';
 
 const BYTE_LENGTH_NORMAL = 620;
 const BYTE_LENGTH_PRO = 540;
@@ -75,24 +77,9 @@ export class QRData {
     return segments as unknown as QRCodeSegment[];
   }
 
-  toFile(path: string): Promise<void> {
-    return QRCode.toFile(path, this.qrSegments());
-  }
-
-  toFileStream(stream: Writable): Promise<void> {
-    // node-qrcode type data is incorrect, QRCode.toFileStream does not actually return a promise here
-    return new Promise<void>((resolve, reject) => {
-      stream.on('close', resolve);
-      stream.on('error', reject);
-      QRCode.toFileStream(stream, this.qrSegments());
-    });
-  }
-
-  toDataUrl(type: 'png' | 'jpeg' | 'webp' = 'png'): Promise<string> {
-    return QRCode.toDataURL(this.qrSegments(), { type: `image/${type}` } as unknown as QRCodeToDataURLOptions);
-  }
-
-  toCanvas(canvas?: unknown): Promise<unknown> {
-    return QRCode.toCanvas(canvas, this.qrSegments());
+  toImage(): Image {
+    const canvas = createCanvas(1, 1);
+    QRCode.toCanvas(canvas, this.qrSegments());
+    return Image.fromCanvas(canvas);
   }
 }

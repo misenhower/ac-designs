@@ -29,8 +29,8 @@
       <ImagePreview :image="image" xbrz />
     </div>
 
-    <div v-if="qrCodes && qrCodes.length">
-      <QRCode v-for="(qrData,i) in qrCodes" :key="i" :qr-data="qrData" />
+    <div v-if="qrCodeImages && qrCodeImages.length">
+      <ImagePreview v-for="(qrImage, i) in qrCodeImages" :key="i" :image="qrImage" />
     </div>
   </div>
 </template>
@@ -41,7 +41,6 @@ import debounce from 'lodash/debounce';
 
 export default {
   components: {
-    QRCode: require('@/components/QRCode').default,
     ImagePreview: require('@/components/ImagePreview').default,
   },
   data() {
@@ -51,12 +50,16 @@ export default {
     };
   },
   computed: {
+    usages() {
+      return DesignUsage.all;
+    },
     image() {
       return this.design.getImage();
     },
-    usages() {
-      return DesignUsage.all;
-    }
+    qrCodeImages() {
+      return this.qrCodes &&
+        this.qrCodes.map(qrCode => qrCode.toImage());
+    },
   },
   watch: {
     design: {
