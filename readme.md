@@ -50,4 +50,8 @@ Many thanks to [ACNLPatternTool](https://github.com/Thulinma/ACNLPatternTool), w
 - [ ] Documentation/examples
   - [ ] Write documentation
   - [ ] Add node example
-  - [X] Add Vue example
+  - [X] Add Vue examples
+    - [X] Image previews
+    - [X] QR images
+    - [ ] Individual segment previews (front/back/sleeves/etc)
+    - [ ] Interactive canvas for drawing designs
