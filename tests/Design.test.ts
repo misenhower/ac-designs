@@ -75,13 +75,13 @@ test('must specify a valid design usage ID', () => {
 
 test('normal color data must be the right length', () => {
   const design = new Design(FakeNormalDesignUsage);
-  expect(() => design.imageData.colorIndexes = new Uint8Array(512)).not.toThrow();
+  expect(() => design.imageData.colorIndexes = new Uint8Array(1024)).not.toThrow();
   expect(() => design.imageData.colorIndexes = new Uint8Array(1)).toThrow();
 });
 
 test('pro color data must be the right length', () => {
   const design = new Design(FakeProDesignUsage);
-  expect(() => design.imageData.colorIndexes = new Uint8Array(2048)).not.toThrow();
+  expect(() => design.imageData.colorIndexes = new Uint8Array(4096)).not.toThrow();
   expect(() => design.imageData.colorIndexes = new Uint8Array(1)).toThrow();
 });
 
