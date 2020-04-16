@@ -34,6 +34,10 @@
     </div>
 
     <div>
+      <ImageEditor :image="indexedImage" :active-color-index="activeColorIndex" />
+    </div>
+
+    <div>
       <ImagePreview :image="image" />
       &nbsp;
       <ImagePreview :image="image" xbrz />
@@ -53,6 +57,7 @@ export default {
   components: {
     ImagePreview: require('@/components/ImagePreview').default,
     ColorPicker: require('@/components/ColorPicker').default,
+    ImageEditor: require('@/components/ImageEditor').default,
   },
   data() {
     return {
@@ -67,6 +72,9 @@ export default {
     },
     image() {
       return this.design.getImage();
+    },
+    indexedImage() {
+      return this.design.getIndexedImage();
     },
     qrCodeImages() {
       return this.qrCodes &&

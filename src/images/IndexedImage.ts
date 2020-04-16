@@ -30,6 +30,31 @@ export class IndexedImage extends IndexedImageBase {
     this.validateCoordinates(x, y);
 
     this._colorIndexes[this.getPixelIndex(x, y)] = value;
+
+    this.notifyVue();
+  }
+
+  /**
+   * This notifies Vue that the data contained within this object has changed
+   * (if this object has been added to a Vue component/made reactive).
+   *
+   * This is a bit of a hack which is needed because Vue 2.x doesn't make
+   * TypedArrays (like Uint8Array) reactive by default. Array<number> doesn't
+   * work either because setting values via array index can't be picked up by
+   * Vue 2.x's reactivity system (https://vuejs.org/v2/guide/reactivity.html).
+   *
+   * Making the entire pixel array reactive comes with a significant performance
+   * penalty in certain cases, so it's probably better overall to keep Design
+   * classes out of Vue's data management and update fields/draw images manually.
+   * This may be removed in the future.
+   */
+  private notifyVue(): void {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const self = this as any;
+
+    if (self.__ob__ && self.__ob__.dep && typeof self.__ob__.dep.notify === 'function') {
+      self.__ob__.dep.notify();
+    }
   }
 
   // Override colorIndexes to refer directly to our _colorIndexes array.
