@@ -24,6 +24,16 @@
     </div>
 
     <div>
+      <ColorPicker
+        v-for="(color, i) in design.colorPalette.colors"
+        :key="i"
+        v-model="color.hex"
+        :active="activeColorIndex === i"
+        @activate="activeColorIndex = i"
+      />
+    </div>
+
+    <div>
       <ImagePreview :image="image" />
       &nbsp;
       <ImagePreview :image="image" xbrz />
@@ -42,11 +52,13 @@ import debounce from 'lodash/debounce';
 export default {
   components: {
     ImagePreview: require('@/components/ImagePreview').default,
+    ColorPicker: require('@/components/ColorPicker').default,
   },
   data() {
     return {
       design: new Design,
       qrCodes: null,
+      activeColorIndex: 0,
     };
   },
   computed: {

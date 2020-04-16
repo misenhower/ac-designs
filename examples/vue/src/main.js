@@ -2,7 +2,11 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 
+import vClickOutside from 'v-click-outside';
+
 Vue.config.productionTip = false
+
+Vue.use(vClickOutside);
 
 new Vue({
   router,
