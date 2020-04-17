@@ -32,7 +32,7 @@ export class Design {
   title: string | undefined = undefined;
 
   /** The player ID (2 bytes). */
-  playerId = 0;
+  playerId = 5611;
 
   /** The creator's name (UTF-16 encoded, up to 18 bytes). */
   creator: string | undefined = undefined;
@@ -41,7 +41,7 @@ export class Design {
   sex = 0;
 
   /** The village ID (2 bytes). */
-  villageId = 0;
+  villageId = 59848;
 
   /** The village name (UTF-16 encoded, up to 18 bytes). */
   village: string | undefined = undefined;
