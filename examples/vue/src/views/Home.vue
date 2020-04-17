@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import { Design, DesignUsage } from 'ac-designs';
+import { Design, DesignUsage } from '@/ac-designs';
 import debounce from 'lodash/debounce';
 
 export default {

@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import { Image } from 'ac-designs';
+import { Image } from '@/ac-designs';
 
 export default {
   props: {

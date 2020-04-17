@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import { Color } from 'ac-designs';
+import { Color } from '@/ac-designs';
 import chunk from 'lodash/chunk';
 
 const allColors = Color.newLeafColorCodes.filter(c => c);
