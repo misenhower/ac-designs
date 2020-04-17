@@ -1,6 +1,5 @@
 import { DesignType } from './DesignType';
-import QRCode, { QRCodeSegment, QRCodeToDataURLOptions } from 'qrcode';
-import { Writable } from 'stream';
+import QRCode, { QRCodeSegment } from 'qrcode';
 import { Image } from './images/Image';
 import { createCanvas } from 'canvas';
 
