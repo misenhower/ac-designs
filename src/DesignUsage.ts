@@ -1,48 +1,133 @@
 import { DesignType } from './DesignType';
+import { ImageSize } from './ImageSize';
+
+interface DesignUsageParameters {
+  id: number;
+  description: string;
+  type: DesignType;
+  imageSize: ImageSize;
+}
 
 export class DesignUsage {
-  public readonly id: number;
-  public readonly type: DesignType;
-  public readonly description: string;
+  readonly id: number;
+  readonly description: string;
+  readonly type: DesignType;
+  readonly imageSize: ImageSize;
 
-  constructor(id: number, type: DesignType, description: string) {
-    this.id = id;
-    this.type = type;
-    this.description = description;
+  constructor(params: DesignUsageParameters) {
+    this.id = params.id;
+    this.description = params.description;
+    this.type = params.type;
+    this.imageSize = params.imageSize;
   }
 
-  get byteLength(): number {
-    return (this.type === DesignType.Pro) ? 2160 : 620;
-  }
-
-  get imageDataPixelWidth(): number {
+  get width(): number {
     return 32;
   }
 
-  get imageDataPixelHeight(): number {
-    return (this.type === DesignType.Pro) ? 128 : 32;
+  get height(): number {
+    return (this.imageSize === ImageSize.Large) ? 128 : 32;
   }
 
-  get imageDataPixelCount(): number {
-    return this.imageDataPixelWidth * this.imageDataPixelHeight;
+  get pixelCount(): number {
+    return this.width * this.height;
   }
 
   get imageDataByteLength(): number {
-    return this.imageDataPixelCount / 2;
+    return this.pixelCount / 2;
   }
 
-  public static readonly LongSleeveDress = new DesignUsage(0, DesignType.Pro, 'Long-sleeve dress');
-  public static readonly ShortSleeveDress = new DesignUsage(1, DesignType.Pro, 'Short-sleeve dress');
-  public static readonly SleevelessDress = new DesignUsage(2, DesignType.Pro, 'Sleeveless dress');
-  public static readonly LongSleeveShirt = new DesignUsage(3, DesignType.Pro, 'Long-sleeve shirt');
-  public static readonly ShortSleeveShirt = new DesignUsage(4, DesignType.Pro, 'Short-sleeve shirt');
-  public static readonly SleevelessShirt = new DesignUsage(5, DesignType.Pro, 'Sleeveless shirt');
-  public static readonly HornedHat = new DesignUsage(6, DesignType.Pro, 'Horned hat');
-  public static readonly KnitCap = new DesignUsage(7, DesignType.Pro, 'Knit cap');
-  public static readonly Standee = new DesignUsage(8, DesignType.Pro, 'Standee');
-  public static readonly CustomDesign = new DesignUsage(9, DesignType.Normal, 'Custom design');
-  public static readonly UnknownUsage010 = new DesignUsage(10, DesignType.Normal, 'Unknown Usage #10');
-  public static readonly UnknownUsage011 = new DesignUsage(11, DesignType.Normal, 'Unknown Usage #11');
+  get byteLength(): number {
+    return (this.imageSize === ImageSize.Large) ? 2160 : 620;
+  }
+
+  get qrCodeCount(): number {
+    return (this.imageSize === ImageSize.Large) ? 4 : 1;
+  }
+
+  public static readonly LongSleeveDress = new DesignUsage({
+    id: 0,
+    description: 'Long-sleeve dress',
+    type: DesignType.Pro,
+    imageSize: ImageSize.Large,
+  });
+
+  public static readonly ShortSleeveDress = new DesignUsage({
+    id: 1,
+    description: 'Short-sleeve dress',
+    type: DesignType.Pro,
+    imageSize: ImageSize.Large,
+  });
+
+  public static readonly SleevelessDress = new DesignUsage({
+    id: 2,
+    description: 'Sleeveless dress',
+    type: DesignType.Pro,
+    imageSize: ImageSize.Large,
+  });
+
+  public static readonly LongSleeveShirt = new DesignUsage({
+    id: 3,
+    description: 'Long-sleeve shirt',
+    type: DesignType.Pro,
+    imageSize: ImageSize.Large,
+  });
+
+  public static readonly ShortSleeveShirt = new DesignUsage({
+    id: 4,
+    description: 'Short-sleeve shirt',
+    type: DesignType.Pro,
+    imageSize: ImageSize.Large,
+  });
+
+  public static readonly SleevelessShirt = new DesignUsage({
+    id: 5,
+    description: 'Sleeveless shirt',
+    type: DesignType.Pro,
+    imageSize: ImageSize.Large,
+  });
+
+  public static readonly HornedHat = new DesignUsage({
+    id: 6,
+    description: 'Horned hat',
+    type: DesignType.Pro,
+    imageSize: ImageSize.Normal,
+  });
+
+  public static readonly KnitCap = new DesignUsage({
+    id: 7,
+    description: 'Knit cap',
+    type: DesignType.Pro,
+    imageSize: ImageSize.Normal,
+  });
+
+  public static readonly Standee = new DesignUsage({
+    id: 8,
+    description: 'Standee',
+    type: DesignType.Pro,
+    imageSize: ImageSize.Large,
+  });
+
+  public static readonly CustomDesign = new DesignUsage({
+    id: 9,
+    description: 'Custom design',
+    type: DesignType.Normal,
+    imageSize: ImageSize.Normal,
+  });
+
+  public static readonly UnknownUsage010 = new DesignUsage({
+    id: 10,
+    description: 'Unknown Usage #10',
+    type: DesignType.Normal,
+    imageSize: ImageSize.Normal,
+  });
+
+  public static readonly UnknownUsage011 = new DesignUsage({
+    id: 11,
+    description: 'Unknown Usage #11',
+    type: DesignType.Normal,
+    imageSize: ImageSize.Normal,
+  });
 
   public static readonly all: DesignUsage[] = [
     DesignUsage.LongSleeveDress,

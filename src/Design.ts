@@ -1,4 +1,3 @@
-import { DesignType } from './DesignType';
 import { DesignUsage } from './DesignUsage';
 import { QRData } from './QRData';
 import { setString, setNumber, setByteSubset, getString, getNumber, getByteSubset, calculateParity, compressImageData, extractImageData } from './support/ByteUtils';
@@ -9,6 +8,10 @@ import { IndexedImage } from './images/IndexedImage';
 import { CompositeIndexedImage } from './images/CompositeIndexedImage';
 import { CompositeImageLayout } from './CompositeImageLayout';
 import { Color } from './Color';
+import { ImageSize } from './ImageSize';
+
+const QR_BYTE_LENGTH_NORMAL = 620;
+const QR_BYTE_LENGTH_SPLIT = 540;
 
 export class Design {
   constructor(usage = DesignUsage.CustomDesign) {
@@ -93,7 +96,7 @@ export class Design {
   private refreshImageData(): void {
     const oldImageData = this._imageData;
 
-    this._imageData = new IndexedImage(this.usage.imageDataPixelWidth, this.usage.imageDataPixelHeight, this);
+    this._imageData = new IndexedImage(this.usage.width, this.usage.height, this);
 
     if (oldImageData) {
       const newIndexes = this._imageData.colorIndexes;
@@ -137,18 +140,18 @@ export class Design {
   toQRData(): QRData[] {
     const bytes = this.toBytes();
 
-    if (this.usage.type === DesignType.Pro) {
+    if (this.usage.qrCodeCount === 4) {
       const parity = calculateParity(bytes);
       return [
-        QRData.fromBytes(getByteSubset(bytes, 0, 540), 0, parity),
-        QRData.fromBytes(getByteSubset(bytes, 540, 540), 1, parity),
-        QRData.fromBytes(getByteSubset(bytes, 1080, 540), 2, parity),
-        QRData.fromBytes(getByteSubset(bytes, 1620, 540), 3, parity),
+        new QRData(getByteSubset(bytes, 0, 540), 0, parity),
+        new QRData(getByteSubset(bytes, 540, 540), 1, parity),
+        new QRData(getByteSubset(bytes, 1080, 540), 2, parity),
+        new QRData(getByteSubset(bytes, 1620, 540), 3, parity),
       ];
     }
 
     return [
-      QRData.fromBytes(bytes),
+      new QRData(bytes),
     ];
   }
 
@@ -181,13 +184,13 @@ export class Design {
     }
 
     // For normal QR data, we can just pass along the single QR code's data
-    const normalData = values.find(d => d.type === DesignType.Normal);
+    const normalData = values.find(d => d.bytes.length === QR_BYTE_LENGTH_NORMAL);
     if (normalData) {
       return this.loadBytes(normalData.bytes);
     }
 
     // For pro data, we need to apply metadata from the first code and color data from all four
-    values.filter(d => d.type === DesignType.Pro)
+    values.filter(d => d.bytes.length === QR_BYTE_LENGTH_SPLIT)
       .forEach(d => this.loadProQRData(d));
   }
 
@@ -213,7 +216,7 @@ export class Design {
 
   getIndexedImage(layout: CompositeImageLayout = CompositeImageLayout.Normal): IndexedImageBase {
     // For pro designs, lay out the image segments in a 64x64 image
-    if (this.usage.type === DesignType.Pro) {
+    if (this.usage.imageSize === ImageSize.Large) {
       // ACPatterns.com uses a slightly different image layout than the game itself
       if (layout === CompositeImageLayout.ACPatterns) {
         return (new CompositeIndexedImage(64, 64))

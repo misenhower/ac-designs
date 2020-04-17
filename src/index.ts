@@ -7,6 +7,7 @@ export { DesignType } from './DesignType';
 export { DesignUsage } from './DesignUsage';
 export { Image } from './images/Image';
 export { ImageFilter } from './images/ImageFilter';
+export { ImageSize } from './ImageSize';
 export { IndexedImage } from './images/IndexedImage';
 export { IndexedImageBase } from './images/IndexedImageBase';
 export { IndexedImageSegment } from './images/IndexedImageSegment';

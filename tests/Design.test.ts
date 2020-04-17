@@ -1,10 +1,11 @@
-import { Design, DesignType, DesignUsage, QRData } from '../src';
+import { Design, DesignType, DesignUsage, QRData, ImageSize } from '../src';
 import { normalDesign } from './fixtures/normalDesign';
 import { proDesign } from './fixtures/proDesign';
 import { extractImageData } from '../src/support/ByteUtils';
 
-const FakeNormalDesignUsage = new DesignUsage(0xAB, DesignType.Normal, 'Fake Normal');
-const FakeProDesignUsage = new DesignUsage(0xCD, DesignType.Pro, 'Fake Pro');
+const FakeNormalDesignUsage = new DesignUsage({ id: 0xAB, type: DesignType.Normal, description: 'Fake Normal', imageSize: ImageSize.Normal });
+const FakeSmallProDesignUsage = new DesignUsage({ id: 0xCD, type: DesignType.Pro, description: 'Fake Small Pro', imageSize: ImageSize.Normal });
+const FakeLargeProDesignUsage = new DesignUsage({ id: 0xEF, type: DesignType.Pro, description: 'Fake Large Pro', imageSize: ImageSize.Large });
 
 function designFactory(usage: DesignUsage = DesignUsage.CustomDesign): Design {
   const design = new Design(usage);
@@ -41,8 +42,14 @@ test('normal designs use the correct number of bytes', () => {
   expect(design.imageData.colorIndexes.length).toBe(1024);
 });
 
-test('pro designs use the correct number of bytes', () => {
-  const design = designFactory(FakeProDesignUsage);
+test('small pro designs use the correct number of bytes', () => {
+  const design = designFactory(FakeSmallProDesignUsage);
+  expect(design.toBytes().length).toBe(620);
+  expect(design.imageData.colorIndexes.length).toBe(1024);
+});
+
+test('large pro designs use the correct number of bytes', () => {
+  const design = designFactory(FakeLargeProDesignUsage);
   expect(design.toBytes().length).toBe(2160);
   expect(design.imageData.colorIndexes.length).toBe(4096);
 });
@@ -79,8 +86,14 @@ test('normal color data must be the right length', () => {
   expect(() => design.imageData.colorIndexes = new Uint8Array(1)).toThrow();
 });
 
-test('pro color data must be the right length', () => {
-  const design = new Design(FakeProDesignUsage);
+test('small pro color data must be the right length', () => {
+  const design = new Design(FakeSmallProDesignUsage);
+  expect(() => design.imageData.colorIndexes = new Uint8Array(1024)).not.toThrow();
+  expect(() => design.imageData.colorIndexes = new Uint8Array(1)).toThrow();
+});
+
+test('large pro color data must be the right length', () => {
+  const design = new Design(FakeLargeProDesignUsage);
   expect(() => design.imageData.colorIndexes = new Uint8Array(4096)).not.toThrow();
   expect(() => design.imageData.colorIndexes = new Uint8Array(1)).toThrow();
 });
@@ -111,7 +124,7 @@ test('pro color data must be the right length', () => {
 });
 
 test('it can read single QR data values', () => {
-  const qrData = QRData.fromBytes(normalDesign.qrCodeDatas[0].bytes);
+  const qrData = new QRData(normalDesign.qrCodeDatas[0].bytes);
   const design = Design.fromQRData(qrData);
 
   expect(design.title).toBe(normalDesign.properties.title);
@@ -119,7 +132,7 @@ test('it can read single QR data values', () => {
 });
 
 test('it can read multiple QR data values', () => {
-  const qrDatas = proDesign.qrCodeDatas.map((d, i) => QRData.fromBytes(d.bytes, i));
+  const qrDatas = proDesign.qrCodeDatas.map((d, i) => new QRData(d.bytes, i));
   const design = Design.fromQRData(qrDatas);
 
   expect(design.title).toBe(proDesign.properties.title);
