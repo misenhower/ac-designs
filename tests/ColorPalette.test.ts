@@ -1,9 +1,10 @@
-import { ColorPalette } from '../src';
+import { ColorPalette, Color } from '../src';
 
 test('it contains the correct number of colors', () => {
   const palette = new ColorPalette;
 
-  expect(palette.colors.length).toBe(15);
+  expect(palette.colors.length).toBe(16);
+  expect(palette.colors[15]).toBe(Color.Transparent);
 });
 
 test('it can export to bytes', () => {

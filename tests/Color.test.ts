@@ -43,5 +43,26 @@ test('it handles valid hex values', () => {
 
 test('it converts to rgba hex', () => {
   expect((new Color(0x03)).hexNumber).toBe(0xFF66AAFF);
-  expect((new Color(-1)).hexNumber).toBeUndefined();
+  expect((new Color(-2)).hexNumber).toBeUndefined();
+});
+
+test('it handles transparency', () => {
+  const color = new Color(-1);
+
+  expect(color.acnlByte).toBe(-1);
+  expect(color.hex).toBe('#00000000');
+  expect(color.hexNumber).toBe(0x00000000);
+});
+
+
+test('it provides an immutable static transparent color', () => {
+  expect(Color.Transparent).toBeInstanceOf(Color);
+
+  expect(Color.Transparent.acnlByte).toBe(-1);
+  expect(Color.Transparent.hex).toBe('#00000000');
+  expect(Color.Transparent.hexNumber).toBe(0x00000000);
+
+  const color = Color.Transparent as Color;
+
+  expect(() => color.acnlByte = 0).toThrow();
 });

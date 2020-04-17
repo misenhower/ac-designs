@@ -7,6 +7,8 @@ export class Color {
     }
   }
 
+  static Transparent = Object.freeze(new Color(-1));
+
   /** Animal Crossing New Leaf color code. */
   acnlByte = 0;
 
@@ -30,6 +32,11 @@ export class Color {
 
   /** Hex number representation of the color with the alpha channel (e.g., 0xFFAA00FF). */
   get hexNumber(): number | undefined {
+    // Special case for a "fake" transparent color
+    if (this.acnlByte === -1) {
+      return 0x00000000;
+    }
+
     const hex = this.hex;
     if (hex === undefined) {
       return undefined;
@@ -44,6 +51,11 @@ export class Color {
   }
 
   private byteToHex(value: number): string | undefined {
+    // Special case for a "fake" transparent color
+    if (value === -1) {
+      return '#00000000';
+    }
+
     return Color.newLeafColorCodes[value];
   }
 

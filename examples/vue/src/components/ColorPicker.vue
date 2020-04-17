@@ -4,10 +4,10 @@
       <div
         class="selected-color"
         :class="{ active: active }"
-        :style="{ background: value }"
+        :style="{ background: (value !== '#00000000') ? value : undefined }"
         @click="activate"
       />
-      <div class="toggle" @click="togglePanel">
+      <div v-if="canEdit" class="toggle" @click="togglePanel">
         &#9660;
       </div>
     </div>
@@ -61,6 +61,9 @@ export default {
   computed: {
     colorGroups() { return colorGroups; },
     grayscaleColors() { return grays; },
+    canEdit() {
+      return this.value !== '#00000000';
+    },
   },
   methods: {
     activate() {
@@ -94,6 +97,7 @@ export default {
   margin: 5px;
   display: inline-block;
   cursor: pointer;
+  background-image: repeating-linear-gradient(-45deg, rgb(204, 204, 204), rgb(204, 204, 204) 5px, rgb(255, 255, 255) 5px, rgb(255, 255, 255) 10px);
 }
 
 .selected-color.active {

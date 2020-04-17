@@ -26,7 +26,7 @@ export default {
       type: Number,
     },
     scale: {
-      default: 8,
+      default: 10,
       type: Number,
     },
   },
@@ -61,12 +61,31 @@ export default {
         // Get the destination drawing context
         const context = this.$refs.canvas.getContext('2d');
 
+        context.beginPath();
+        context.rect(0, 0, this.totalWidth, this.totalHeight);
+        context.fillStyle = '#FFF';
+        context.fill();
+
+        // Draw a checkerboard background (to represent transparency)
+        context.beginPath();
+        const rectSize = this.scale / 3;
+        for (let x = 0; x <= this.totalWidth / rectSize; x++) {
+          for (let y = 0; y <= this.totalHeight / rectSize; y++) {
+            if ((x + y) % 2 === 0) {
+              context.rect(x * rectSize, y * rectSize, rectSize, rectSize);
+            }
+          }
+        }
+        context.fillStyle = '#CCC';
+        context.fill();
+
         // Disable image smoothing and copy the (scaled-up) image
         context.imageSmoothingEnabled = false;
         const imageCanvas = this.image.toImage().toCanvas();
         context.drawImage(imageCanvas, 0, 0, imageCanvas.width, imageCanvas.height, 0, 0, this.width, this.height);
 
         // Draw a grid over the image
+        context.beginPath();
         context.lineWidth = 1;
         context.strokeStyle = '#CCC';
         for (let x = 0; x <= this.image.width; x++) {

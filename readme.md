@@ -44,7 +44,7 @@ Many thanks to [ACNLPatternTool](https://github.com/Thulinma/ACNLPatternTool), w
   - [X] Tests: Import classes from `'../src/index'`
   - [X] Improve error messages (e.g., show the expected/actual byte counts)
   - [ ] Rename fields called colorPalette to palette
-  - [ ] Include the transparent color in ColorPalette
+  - [X] Include the transparent color in ColorPalette
   - [ ] Change colorData/"color data" to image data
 
 - [ ] Documentation/examples

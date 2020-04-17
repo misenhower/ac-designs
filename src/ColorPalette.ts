@@ -3,12 +3,13 @@ import { Color } from './Color';
 const COLOR_PALETTE_LENGTH = 15;
 
 export class ColorPalette {
-  public readonly colors = new Array<Color>(COLOR_PALETTE_LENGTH);
+  public readonly colors = new Array<Color>(COLOR_PALETTE_LENGTH + 1);
 
   constructor(acnlBytes?: Uint8Array) {
     for (let i = 0; i < COLOR_PALETTE_LENGTH; i++) {
       this.colors[i] = new Color;
     }
+    this.colors[15] = Color.Transparent as Color;
 
     if (acnlBytes) {
       this.acnlBytes = acnlBytes;
@@ -16,7 +17,7 @@ export class ColorPalette {
   }
 
   get acnlBytes(): Uint8Array {
-    return new Uint8Array(this.colors.map(c => c.acnlByte));
+    return new Uint8Array(this.colors.slice(0, COLOR_PALETTE_LENGTH).map(c => c.acnlByte));
   }
 
   set acnlBytes(value: Uint8Array) {
