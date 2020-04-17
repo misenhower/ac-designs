@@ -52,7 +52,7 @@ export abstract class IndexedImageBase {
     return new IndexedImageSegment(this, x, y, width, height);
   }
 
-  getImage(): Image {
+  toImage(): Image {
     // Get the RGBA hex values for each color in the palette
     const palette = this.colorPalette.colors.map(c => c.hexNumber);
     palette.push(0x00000000); // The last palette index is reserved for transparency

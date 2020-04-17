@@ -38,7 +38,7 @@ Many thanks to [ACNLPatternTool](https://github.com/Thulinma/ACNLPatternTool), w
   - [X] Switch to node-canvas
 
 - [ ] Cleanup
-  - [ ] Improve naming consistency between `to*` and `get*` methods
+  - [X] Improve naming consistency between `to*` and `get*` methods
   - [X] Improve consistency between QR image and rendered design image output methods
   - [X] Update `Color` to make it more clear that color values are ACNH byte codes
   - [X] Tests: Import classes from `'../src/index'`

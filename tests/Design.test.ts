@@ -18,32 +18,32 @@ test('title is required', () => {
   const design = designFactory();
 
   design.title = undefined;
-  expect(() => design.getBytes()).toThrow();
+  expect(() => design.toBytes()).toThrow();
 });
 
 test('creator is required', () => {
   const design = designFactory();
 
   design.creator = undefined;
-  expect(() => design.getBytes()).toThrow();
+  expect(() => design.toBytes()).toThrow();
 });
 
 test('village is required', () => {
   const design = designFactory();
 
   design.village = undefined;
-  expect(() => design.getBytes()).toThrow();
+  expect(() => design.toBytes()).toThrow();
 });
 
 test('normal designs use the correct number of bytes', () => {
   const design = designFactory(FakeNormalDesignUsage);
-  expect(design.getBytes().length).toBe(620);
+  expect(design.toBytes().length).toBe(620);
   expect(design.imageData.colorIndexes.length).toBe(1024);
 });
 
 test('pro designs use the correct number of bytes', () => {
   const design = designFactory(FakeProDesignUsage);
-  expect(design.getBytes().length).toBe(2160);
+  expect(design.toBytes().length).toBe(2160);
   expect(design.imageData.colorIndexes.length).toBe(4096);
 });
 
@@ -106,7 +106,7 @@ test('pro color data must be the right length', () => {
     expect(design.usageId).toBe(sample.properties.usageId);
     expect(design.imageData.colorIndexes).toStrictEqual(extractColorData(sample.properties.colorData));
 
-    expect(design.getBytes()).toStrictEqual(sample.bytes);
+    expect(design.toBytes()).toStrictEqual(sample.bytes);
   });
 });
 
@@ -115,7 +115,7 @@ test('it can read single QR data values', () => {
   const design = Design.fromQRData(qrData);
 
   expect(design.title).toBe(normalDesign.properties.title);
-  expect(design.getBytes()).toStrictEqual(normalDesign.bytes);
+  expect(design.toBytes()).toStrictEqual(normalDesign.bytes);
 });
 
 test('it can read multiple QR data values', () => {
@@ -123,7 +123,7 @@ test('it can read multiple QR data values', () => {
   const design = Design.fromQRData(qrDatas);
 
   expect(design.title).toBe(proDesign.properties.title);
-  expect(design.getBytes()).toStrictEqual(proDesign.bytes);
+  expect(design.toBytes()).toStrictEqual(proDesign.bytes);
 });
 
 test('it handles special characters', () => {
@@ -131,11 +131,11 @@ test('it handles special characters', () => {
 
   design.title = 'あ';
   expect(design.title).toBe('あ');
-  expect(design.getBytes().subarray(0, 2)).toStrictEqual(new Uint8Array([0x42, 0x30]));
+  expect(design.toBytes().subarray(0, 2)).toStrictEqual(new Uint8Array([0x42, 0x30]));
 
   design.title = '👍';
   expect(design.title).toBe('👍');
-  expect(design.getBytes().subarray(0, 4)).toStrictEqual(new Uint8Array([0x3D, 0xD8, 0x4D, 0xDC]));
+  expect(design.toBytes().subarray(0, 4)).toStrictEqual(new Uint8Array([0x3D, 0xD8, 0x4D, 0xDC]));
 });
 
 [normalDesign, proDesign].forEach((sample) => {
@@ -157,14 +157,14 @@ test('it handles special characters', () => {
     design.usageId = sample.properties.usageId;
     design.imageData.colorIndexes = extractColorData(sample.properties.colorData);
 
-    expect(design.getBytes()).toStrictEqual(sample.bytes);
+    expect(design.toBytes()).toStrictEqual(sample.bytes);
   });
 });
 
 test('it generates normal QR codes', () => {
   const design = Design.fromBytes(normalDesign.bytes);
 
-  const qrDatas = design.getQRData();
+  const qrDatas = design.toQRData();
 
   expect(qrDatas).toHaveLength(1);
   expect(qrDatas[0].bytes).toStrictEqual(normalDesign.qrCodeDatas[0].bytes);
@@ -175,7 +175,7 @@ test('it generates normal QR codes', () => {
 test('it generates pro QR codes', () => {
   const design = Design.fromBytes(proDesign.bytes);
 
-  const qrDatas = design.getQRData();
+  const qrDatas = design.toQRData();
 
   expect(qrDatas).toHaveLength(4);
 

@@ -7,7 +7,7 @@ import { proDesign } from './fixtures/proDesign';
 [normalDesign, proDesign].forEach((sample) => {
   test(`it can convert normal designs to image files: ${sample.description}`, async () => {
     const design = Design.fromBytes(sample.bytes);
-    const image = design.getImage();
+    const image = design.toImage();
 
     const expected = await fs.readFile(`tests/fixtures/${sample.imagePngFile}`);
 
@@ -22,7 +22,7 @@ import { proDesign } from './fixtures/proDesign';
 [normalDesign, proDesign].forEach((sample) => {
   test(`it can convert normal designs to image data URLs ${sample.description}`, () => {
     const design = Design.fromBytes(sample.bytes);
-    const image = design.getImage();
+    const image = design.toImage();
 
     const result = image.toDataURL();
 
@@ -32,7 +32,7 @@ import { proDesign } from './fixtures/proDesign';
 
 test('it can use the acpatterns.com layout for pro designs', async () => {
   const design = Design.fromBytes(proDesign.bytes);
-  const image = design.getImage(CompositeImageLayout.ACPatterns);
+  const image = design.toImage(CompositeImageLayout.ACPatterns);
 
   const expectedFile = await fs.readFile(`tests/fixtures/${proDesign.imagePngFileAcpatterns}`);
 
@@ -45,7 +45,7 @@ test('it can use the acpatterns.com layout for pro designs', async () => {
 
 test('it can use xBRZ to upscale images', async () => {
   const design = Design.fromBytes(normalDesign.bytes);
-  const image = design.getImage();
+  const image = design.toImage();
 
   const expected = await fs.readFile('tests/fixtures/normal_image_xbrz_4x.png');
 
@@ -60,7 +60,7 @@ test('it can use xBRZ to upscale images', async () => {
 
 test('it can use xBRZ to upscale images with a specified scale', async () => {
   const design = Design.fromBytes(normalDesign.bytes);
-  const image = design.getImage();
+  const image = design.toImage();
 
   const expected = await fs.readFile('tests/fixtures/normal_image_xbrz_6x.png');
 

@@ -71,7 +71,7 @@ export default {
       return DesignUsage.all;
     },
     image() {
-      return this.design.getImage();
+      return this.design.toImage();
     },
     indexedImage() {
       return this.design.getIndexedImage();
@@ -95,7 +95,7 @@ export default {
   methods: {
     updateQRCodes() {
       try {
-        this.qrCodes = this.design.getQRData();
+        this.qrCodes = this.design.toQRData();
       } catch (e) {
         this.qrCodes = null;
       }

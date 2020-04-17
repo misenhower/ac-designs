@@ -63,7 +63,7 @@ export default {
 
         // Disable image smoothing and copy the (scaled-up) image
         context.imageSmoothingEnabled = false;
-        const imageCanvas = this.image.getImage().toCanvas();
+        const imageCanvas = this.image.toImage().toCanvas();
         context.drawImage(imageCanvas, 0, 0, imageCanvas.width, imageCanvas.height, 0, 0, this.width, this.height);
 
         // Draw a grid over the image

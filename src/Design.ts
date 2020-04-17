@@ -100,7 +100,7 @@ export class Design {
 
   // Export
 
-  getBytes(): Uint8Array {
+  toBytes(): Uint8Array {
     if (this.title === undefined) {
       throw new Error('Title is required');
     }
@@ -130,8 +130,8 @@ export class Design {
     return data;
   }
 
-  getQRData(): QRData[] {
-    const bytes = this.getBytes();
+  toQRData(): QRData[] {
+    const bytes = this.toBytes();
 
     if (this.usage.type === DesignType.Pro) {
       const parity = calculateParity(bytes);
@@ -232,7 +232,7 @@ export class Design {
     return this.imageData;
   }
 
-  getImage(layout: CompositeImageLayout = CompositeImageLayout.Normal): Image {
-    return this.getIndexedImage(layout).getImage();
+  toImage(layout: CompositeImageLayout = CompositeImageLayout.Normal): Image {
+    return this.getIndexedImage(layout).toImage();
   }
 }
