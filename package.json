@@ -6,9 +6,10 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
+    "clean": "rimraf dist",
     "lint": "eslint */**/*.{js,ts,tsx} --quiet --fix",
     "test": "jest",
-    "prepare": "yarn build",
+    "prepare": "yarn clean && yarn build",
     "prepublishOnly": "yarn lint && yarn test"
   },
   "repository": {
@@ -30,6 +31,7 @@
     "@typescript-eslint/parser": "^2.26.0",
     "eslint": "^6.8.0",
     "jest": "^25.2.6",
+    "rimraf": "^3.0.2",
     "tmp-promise": "^2.0.2",
     "ts-jest": "^25.3.0",
     "typescript": "^3.8.3"
