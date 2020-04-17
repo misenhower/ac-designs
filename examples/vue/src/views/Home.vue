@@ -25,7 +25,7 @@
 
     <div>
       <ColorPicker
-        v-for="(color, i) in design.colorPalette.colors"
+        v-for="(color, i) in design.colors"
         :key="i"
         v-model="color.hex"
         :active="activeColorIndex === i"
@@ -91,6 +91,8 @@ export default {
     this.design.title = 'Example Design';
     this.design.creator = 'Someone';
     this.design.village = 'Somewhere';
+    this.design.colorPalette.acnlBytes = [0x14, 0x24, 0x74, 0xF4, 0xA4, 0xD4, 0xC4, 0x94, 0x84, 0x54, 0x34, 0x64, 0x0F, 0x7F, 0xEF];
+    this.design.imageData.colorIndexes.fill(12);
   },
   methods: {
     updateQRCodes() {

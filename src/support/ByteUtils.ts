@@ -42,7 +42,7 @@ export function calculateParity(data: Uint8Array, previousValue = 0): number {
 }
 
 /** Compresses separate nibbles into bytes, e.g., 0x0A0B0C0D becomes 0xBADC */
-export function compressColorData(data: Uint8Array): Uint8Array {
+export function compressImageData(data: Uint8Array): Uint8Array {
   const result = new Uint8Array(data.length / 2);
   for (let i = 0; i < result.length; i++) {
     result[i] = (data[i * 2] & 0x0F) + (data[i * 2 + 1] << 4);
@@ -51,7 +51,7 @@ export function compressColorData(data: Uint8Array): Uint8Array {
 }
 
 /** Extracts separate nibbles from bytes, e.g., 0xBADC becomes 0x0A0B0C0D */
-export function extractColorData(data: Uint8Array): Uint8Array {
+export function extractImageData(data: Uint8Array): Uint8Array {
   const result = new Uint8Array(data.length * 2);
   for (let i = 0; i < data.length; i++) {
     result[i * 2] = (data[i] & 0x0F);

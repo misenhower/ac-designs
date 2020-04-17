@@ -43,9 +43,9 @@ Many thanks to [ACNLPatternTool](https://github.com/Thulinma/ACNLPatternTool), w
   - [X] Update `Color` to make it more clear that color values are ACNH byte codes
   - [X] Tests: Import classes from `'../src/index'`
   - [X] Improve error messages (e.g., show the expected/actual byte counts)
-  - [ ] Rename fields called colorPalette to palette
+  - [ ] ~~Rename fields called colorPalette to palette~~
   - [X] Include the transparent color in ColorPalette
-  - [ ] Change colorData/"color data" to image data
+  - [X] Change colorData/"color data" to image data
 
 - [ ] Documentation/examples
   - [ ] Write documentation

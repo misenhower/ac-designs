@@ -1,13 +1,14 @@
 import { DesignType } from './DesignType';
 import { DesignUsage } from './DesignUsage';
 import { QRData } from './QRData';
-import { setString, setNumber, setByteSubset, getString, getNumber, getByteSubset, calculateParity, compressColorData, extractColorData } from './support/ByteUtils';
+import { setString, setNumber, setByteSubset, getString, getNumber, getByteSubset, calculateParity, compressImageData, extractImageData } from './support/ByteUtils';
 import { ColorPalette } from './ColorPalette';
 import { Image } from './images/Image';
 import { IndexedImageBase } from './images/IndexedImageBase';
 import { IndexedImage } from './images/IndexedImage';
 import { CompositeIndexedImage } from './images/CompositeIndexedImage';
 import { CompositeImageLayout } from './CompositeImageLayout';
+import { Color } from './Color';
 
 export class Design {
   constructor(usage = DesignUsage.CustomDesign) {
@@ -57,6 +58,9 @@ export class Design {
   /** The color palette (15 bytes). */
   colorPalette = new ColorPalette;
 
+  /** The colors used in the palette for this design */
+  get colors(): Array<Color> { return this.colorPalette.colors; }
+
   /** The color (this field's purpose is currently unknown) (1 byte). */
   color = 0;
 
@@ -82,14 +86,14 @@ export class Design {
     this.usage = usage;
   }
 
-  /** Each pixel's color data. */
+  /** Each pixel's color index data. */
   private _imageData!: IndexedImage;
   get imageData(): IndexedImageBase { return this._imageData; }
 
   private refreshImageData(): void {
     const oldImageData = this._imageData;
 
-    this._imageData = new IndexedImage(this.usage.colorDataPixelWidth, this.usage.colorDataPixelHeight, this);
+    this._imageData = new IndexedImage(this.usage.imageDataPixelWidth, this.usage.imageDataPixelHeight, this);
 
     if (oldImageData) {
       const newIndexes = this._imageData.colorIndexes;
@@ -125,7 +129,7 @@ export class Design {
     setNumber(data, 103, 1, this.color);
     setNumber(data, 104, 1, this.looks);
     setNumber(data, 105, 1, this.usageId);
-    setByteSubset(data, 108, compressColorData(this.imageData.colorIndexes));
+    setByteSubset(data, 108, compressImageData(this.imageData.colorIndexes));
 
     return data;
   }
@@ -152,7 +156,7 @@ export class Design {
 
   loadBytes(bytes: Uint8Array): void {
     this.loadMetadataBytes(bytes);
-    this.imageData.colorIndexes = extractColorData(getByteSubset(bytes, 108, this.usage.colorDataByteLength));
+    this.imageData.colorIndexes = extractImageData(getByteSubset(bytes, 108, this.usage.imageDataByteLength));
   }
 
   private loadMetadataBytes(data: Uint8Array): void {
@@ -191,16 +195,16 @@ export class Design {
     switch (data.index) {
       case 0:
         this.loadMetadataBytes(data.bytes);
-        setByteSubset(this.imageData.colorIndexes, 0, extractColorData(getByteSubset(data.bytes, 108, 432)));
+        setByteSubset(this.imageData.colorIndexes, 0, extractImageData(getByteSubset(data.bytes, 108, 432)));
         break;
       case 1:
-        setByteSubset(this.imageData.colorIndexes, 864, extractColorData(getByteSubset(data.bytes, 0, 540)));
+        setByteSubset(this.imageData.colorIndexes, 864, extractImageData(getByteSubset(data.bytes, 0, 540)));
         break;
       case 2:
-        setByteSubset(this.imageData.colorIndexes, 1944, extractColorData(getByteSubset(data.bytes, 0, 540)));
+        setByteSubset(this.imageData.colorIndexes, 1944, extractImageData(getByteSubset(data.bytes, 0, 540)));
         break;
       case 3:
-        setByteSubset(this.imageData.colorIndexes, 3024, extractColorData(getByteSubset(data.bytes, 0, 536)));
+        setByteSubset(this.imageData.colorIndexes, 3024, extractImageData(getByteSubset(data.bytes, 0, 536)));
         break;
     }
   }

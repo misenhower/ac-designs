@@ -21,6 +21,7 @@
             :key="color"
             :style="{ background: color }"
             class="color"
+            :title="color"
             @click="select(color)"
           />
         </div>
@@ -32,6 +33,7 @@
           :key="color"
           :style="{ background: color }"
           class="color"
+          :title="color"
           @click="select(color)"
         />
       </div>
@@ -43,7 +45,7 @@
 import { Color } from '@/ac-designs';
 import chunk from 'lodash/chunk';
 
-const allColors = Color.newLeafColorCodes.filter(c => c);
+const allColors = Color.newLeafColors;
 const grays = allColors.filter((c, i) => i % 10 === 9);
 const colors = allColors.filter(c => grays.indexOf(c) === -1);
 const colorGroups = chunk(colors, 9);

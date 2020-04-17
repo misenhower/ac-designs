@@ -15,20 +15,20 @@ export class DesignUsage {
     return (this.type === DesignType.Pro) ? 2160 : 620;
   }
 
-  get colorDataPixelWidth(): number {
+  get imageDataPixelWidth(): number {
     return 32;
   }
 
-  get colorDataPixelHeight(): number {
+  get imageDataPixelHeight(): number {
     return (this.type === DesignType.Pro) ? 128 : 32;
   }
 
-  get colorDataPixelCount(): number {
-    return this.colorDataPixelWidth * this.colorDataPixelHeight;
+  get imageDataPixelCount(): number {
+    return this.imageDataPixelWidth * this.imageDataPixelHeight;
   }
 
-  get colorDataByteLength(): number {
-    return this.colorDataPixelCount / 2;
+  get imageDataByteLength(): number {
+    return this.imageDataPixelCount / 2;
   }
 
   public static readonly LongSleeveDress = new DesignUsage(0, DesignType.Pro, 'Long-sleeve dress');

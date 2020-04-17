@@ -107,4 +107,6 @@ export class Color {
     '#AAFFAA', '#77FF77', '#66DD44', '#00FF00', '#22DD22', '#55BB55', '#00BB00', '#008800', '#224422',,,,,,,
     ,
   ];
+
+  static readonly newLeafColors = Color.newLeafColorCodes.filter(c => c);
 }

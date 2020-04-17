@@ -1,7 +1,7 @@
 import { Design, DesignType, DesignUsage, QRData } from '../src';
 import { normalDesign } from './fixtures/normalDesign';
 import { proDesign } from './fixtures/proDesign';
-import { extractColorData } from '../src/support/ByteUtils';
+import { extractImageData } from '../src/support/ByteUtils';
 
 const FakeNormalDesignUsage = new DesignUsage(0xAB, DesignType.Normal, 'Fake Normal');
 const FakeProDesignUsage = new DesignUsage(0xCD, DesignType.Pro, 'Fake Pro');
@@ -104,7 +104,7 @@ test('pro color data must be the right length', () => {
     expect(design.color).toBe(sample.properties.color);
     expect(design.looks).toBe(sample.properties.looks);
     expect(design.usageId).toBe(sample.properties.usageId);
-    expect(design.imageData.colorIndexes).toStrictEqual(extractColorData(sample.properties.colorData));
+    expect(design.imageData.colorIndexes).toStrictEqual(extractImageData(sample.properties.imageData));
 
     expect(design.toBytes()).toStrictEqual(sample.bytes);
   });
@@ -155,7 +155,7 @@ test('it handles special characters', () => {
     design.color = sample.properties.color;
     design.looks = sample.properties.looks;
     design.usageId = sample.properties.usageId;
-    design.imageData.colorIndexes = extractColorData(sample.properties.colorData);
+    design.imageData.colorIndexes = extractImageData(sample.properties.imageData);
 
     expect(design.toBytes()).toStrictEqual(sample.bytes);
   });
@@ -184,4 +184,10 @@ test('it generates pro QR codes', () => {
     expect(qrDatas[i].index).toBe(i);
     expect(qrDatas[i].parity).toBe(proDesign.parity);
   }
+});
+
+test('it provides a direct getter to the color palette\'s colors', () => {
+  const design = new Design;
+
+  expect(design.colors).toBe(design.colorPalette.colors);
 });
