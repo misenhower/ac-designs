@@ -1,6 +1,6 @@
 import { promises as fs } from 'fs';
 import { withFile } from 'tmp-promise';
-import { QRData, DesignType } from '../src';
+import { QRData } from '../src';
 import { normalDesign } from './fixtures/normalDesign';
 import { proDesign } from './fixtures/proDesign';
 
