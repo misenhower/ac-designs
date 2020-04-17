@@ -21,7 +21,7 @@ export class ColorPalette {
 
   set acnlBytes(value: Uint8Array) {
     if (value.length !== COLOR_PALETTE_LENGTH) {
-      throw new Error('Invalid color palette length');
+      throw new Error(`Invalid color palette length, expected ${COLOR_PALETTE_LENGTH} bytes, got ${value.length} bytes`);
     }
 
     for (let i = 0; i < COLOR_PALETTE_LENGTH; i++) {

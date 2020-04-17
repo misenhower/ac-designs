@@ -42,7 +42,7 @@ Many thanks to [ACNLPatternTool](https://github.com/Thulinma/ACNLPatternTool), w
   - [X] Improve consistency between QR image and rendered design image output methods
   - [X] Update `Color` to make it more clear that color values are ACNH byte codes
   - [X] Tests: Import classes from `'../src/index'`
-  - [ ] Improve error messages (e.g., show the expected/actual byte counts)
+  - [X] Improve error messages (e.g., show the expected/actual byte counts)
   - [ ] Rename fields called colorPalette to palette
   - [ ] Include the transparent color in ColorPalette
   - [ ] Change colorData/"color data" to image data

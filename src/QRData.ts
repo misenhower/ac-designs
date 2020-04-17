@@ -38,7 +38,7 @@ export class QRData {
       return new QRData(DesignType.Pro, index, parity, bytes);
     }
 
-    throw new Error('Invalid data length');
+    throw new Error(`Invalid data length, expected ${BYTE_LENGTH_NORMAL} bytes for normal designs, ${BYTE_LENGTH_PRO} for pro designs, got ${bytes.length} bytes`);
   }
 
   private byteLength(): number {
@@ -52,7 +52,7 @@ export class QRData {
   get bytes(): Uint8Array { return this._bytes; }
   set bytes(value: Uint8Array) {
     if (value.length !== this.byteLength()) {
-      throw new Error('Invalid data length');
+      throw new Error(`Invalid data length, expected ${this.byteLength()}, got ${value.length}`);
     }
     this._bytes = value;
   }
@@ -64,10 +64,10 @@ export class QRData {
 
     if (this.type === DesignType.Pro) {
       if (this.index === undefined) {
-        throw new Error('Index is required');
+        throw new Error('Index is required for pro designs');
       }
       if (this.parity === undefined) {
-        throw new Error('Parity byte is required');
+        throw new Error('Parity byte is required for pro designs');
       }
 
       segments.unshift({ mode: 'structuredappend', data: { position: this.index, total: 3, parity: this.parity } });
